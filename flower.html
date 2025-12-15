@@ -2,23 +2,282 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Flower</title>
+  <title>Bobby Black Exclusive | Flower</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #fff; }
-    header { padding: 16px; font-weight: bold; font-size: 22px; }
-    section { padding: 16px; }
-    .item { padding: 10px 0; border-bottom: 1px solid #eee; }
-    .sale { color: red; font-weight: bold; }
+    :root{
+      --bg:#fafafa; --text:#111; --muted:#666; --card:#fff; --border:#eaeaea;
+      --shadow:0 10px 28px rgba(0,0,0,.10);
+    }
+    *{box-sizing:border-box}
+    body{font-family:Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+    header{padding:22px 16px 10px;text-align:center}
+    .brand-logo{max-width:280px;width:72%;height:auto;display:block;margin:0 auto}
+    .subtitle{margin-top:10px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 46px}
+
+    .topnav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 18px}
+    .pill{
+      background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);
+      border-radius:999px;padding:10px 14px;text-decoration:none;color:var(--text);
+      font-weight:700;font-size:14px;transition:transform .08s ease-in-out
+    }
+    .pill:hover{transform:translateY(-1px)}
+    .pill.active{background:#111;color:#fff;border-color:#111}
+
+    h1{font-size:22px;margin:18px 0 8px;text-align:left}
+    .section{margin-top:18px}
+    .section-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin:0 0 10px;font-size:16px;letter-spacing:1px;text-transform:uppercase;color:#222
+    }
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .card{
+      background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);
+      border-radius:18px;padding:14px 14px 12px
+    }
+    .name-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .name{font-weight:800;font-size:16px;line-height:1.2}
+    .badge{font-weight:900;font-size:12px;color:#b00000}
+    .line{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px;color:#222;font-size:13px}
+    .kv{background:#f4f4f4;border:1px solid #eee;border-radius:999px;padding:6px 10px}
+    .kv strong{font-weight:900}
+    footer{text-align:center;padding:18px;color:var(--muted);font-size:14px}
+
+    /* Age Gate */
+    .age-gate{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px}
+    .age-gate.show{display:flex}
+    .age-card{background:#fff;width:100%;max-width:420px;border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+    .age-title{font-size:22px;font-weight:900;margin-bottom:8px}
+    .age-text{color:#444;font-size:14px;line-height:1.4}
+    .age-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+    .age-btn{border:0;border-radius:999px;padding:12px 14px;font-weight:900;cursor:pointer}
+    .age-btn.yes{background:#111;color:#fff}
+    .age-btn.no{background:#eee;color:#111}
+    .age-fineprint{margin-top:12px;font-size:12px;color:#777}
+
+    @media (max-width:860px){.grid{grid-template-columns:1fr}}
+    @media (max-width:700px){.brand-logo{width:86%}}
   </style>
 </head>
 <body>
-  <header>Flower</header>
-  <section>
-    <div class="item">
-      Example Item <span class="sale">🚨</span><br/>
-      3.5g: $25 | 7g: $45 | 14g: $90 | 28g: $160
+  <!-- Age Gate -->
+  <div id="ageGate" class="age-gate" aria-hidden="true">
+    <div class="age-card" role="dialog" aria-modal="true" aria-label="Age verification">
+      <div class="age-title">21+ Only</div>
+      <div class="age-text">Please confirm you are 21 years of age or older to enter.</div>
+      <div class="age-actions">
+        <button class="age-btn yes" id="ageYes">I’m 21+</button>
+        <button class="age-btn no" id="ageNo">No</button>
+      </div>
+      <div class="age-fineprint">By entering, you agree you meet the legal age requirement in your area.</div>
     </div>
-  </section>
+  </div>
+
+  <header>
+    <img class="brand-logo" src="bobby-black.png" alt="Bobby Black Exclusive" />
+    <div class="subtitle">Flower</div>
+  </header>
+
+  <div class="wrap">
+    <div class="topnav">
+      <a class="pill active" href="flower.html">Flower</a>
+      <a class="pill" href="concentrates.html">Concentrates</a>
+      <a class="pill" href="accessories.html">Accessories</a>
+    </div>
+
+    <!-- BOBBY BLACK EXCLUSIVE -->
+    <div class="section">
+      <div class="section-title">
+        <span>BOBBY BLACK EXCLUSIVE</span>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Sherbanger 22</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $40</span>
+            <span class="kv"><strong>7g</strong>: $80</span>
+            <span class="kv"><strong>14g</strong>: $140</span>
+            <span class="kv"><strong>28g</strong>: $270</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CA$H RULE$ -->
+    <div class="section">
+      <div class="section-title">
+        <span>CA$H RULE$</span>
+      </div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">CRAZZY</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: N/A</span>
+            <span class="kv"><strong>7g</strong>: $120</span>
+            <span class="kv"><strong>14g</strong>: $220</span>
+            <span class="kv"><strong>28g</strong>: $400</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">JELLY FISH</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: N/A</span>
+            <span class="kv"><strong>7g</strong>: $110</span>
+            <span class="kv"><strong>14g</strong>: $200</span>
+            <span class="kv"><strong>28g</strong>: $380</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Frosted Peaches</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $50</span>
+            <span class="kv"><strong>7g</strong>: $100</span>
+            <span class="kv"><strong>14g</strong>: $180</span>
+            <span class="kv"><strong>28g</strong>: $340</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">SUGAR SHOCK</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $50</span>
+            <span class="kv"><strong>7g</strong>: $100</span>
+            <span class="kv"><strong>14g</strong>: $180</span>
+            <span class="kv"><strong>28g</strong>: $340</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LOOSE LINEUP -->
+    <div class="section">
+      <div class="section-title">
+        <span>LOOSE LINEUP</span>
+      </div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Verzace</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $35</span>
+            <span class="kv"><strong>7g</strong>: $60</span>
+            <span class="kv"><strong>14g</strong>: $110</span>
+            <span class="kv"><strong>28g</strong>: $200</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Space Candy</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $30</span>
+            <span class="kv"><strong>7g</strong>: $50</span>
+            <span class="kv"><strong>14g</strong>: $100</span>
+            <span class="kv"><strong>28g</strong>: $180</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Super Lemon Cherry</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $30</span>
+            <span class="kv"><strong>7g</strong>: $50</span>
+            <span class="kv"><strong>14g</strong>: $100</span>
+            <span class="kv"><strong>28g</strong>: $180</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Blow Pop</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $30</span>
+            <span class="kv"><strong>7g</strong>: $50</span>
+            <span class="kv"><strong>14g</strong>: $100</span>
+            <span class="kv"><strong>28g</strong>: $180</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Chronic Candy</div>
+            <div class="badge">🚨 SALE</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $25</span>
+            <span class="kv"><strong>7g</strong>: $45</span>
+            <span class="kv"><strong>14g</strong>: $90</span>
+            <span class="kv"><strong>28g</strong>: $160</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">ADL</div>
+            <div class="badge">🚨 SALE</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: $25</span>
+            <span class="kv"><strong>7g</strong>: $40</span>
+            <span class="kv"><strong>14g</strong>: $70</span>
+            <span class="kv"><strong>28g</strong>: $120</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="name-row">
+            <div class="name">Rainbow Belts</div>
+          </div>
+          <div class="line">
+            <span class="kv"><strong>3.5g</strong>: N/A</span>
+            <span class="kv"><strong>7g</strong>: $35</span>
+            <span class="kv"><strong>14g</strong>: $60</span>
+            <span class="kv"><strong>28g</strong>: $90</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>Updated Weekly • 21+</footer>
+
+  <script>
+    (function () {
+      const KEY = "bbe_age_verified";
+      const gate = document.getElementById("ageGate");
+      const yes = document.getElementById("ageYes");
+      const no = document.getElementById("ageNo");
+
+      function showGate(){ gate.classList.add("show"); gate.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; }
+      function hideGate(){ gate.classList.remove("show"); gate.setAttribute("aria-hidden","true"); document.body.style.overflow=""; }
+
+      if (localStorage.getItem(KEY) !== "true") showGate();
+
+      yes.addEventListener("click", function () { localStorage.setItem(KEY, "true"); hideGate(); });
+      no.addEventListener("click", function () { window.location.href = "https://www.google.com"; });
+    })();
+  </script>
 </body>
 </html>
