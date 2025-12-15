@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bobby Black Exclusive | Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root{--bg:#fafafa;--text:#111;--muted:#666;--card:#fff;--border:#eaeaea;--shadow:0 10px 28px rgba(0,0,0,.10);}
+    *{box-sizing:border-box}
+    body{font-family:Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+    header{text-align:center;padding:22px 16px 10px}
+    .brand-logo{max-width:260px;width:72%;margin:0 auto;display:block}
+    .subtitle{margin-top:10px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+    .wrap{max-width:900px;margin:0 auto;padding:16px 16px 46px}
+    .back{display:inline-block;margin-bottom:12px;text-decoration:none;font-weight:900;color:#111}
+
+    .card{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:18px;padding:14px;margin-top:12px}
+    .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .name{font-weight:900}
+    .meta{color:#444;font-size:13px;margin-top:4px}
+    .qty{display:flex;gap:8px;align-items:center}
+    .btn{border:0;border-radius:999px;padding:8px 10px;font-weight:900;cursor:pointer}
+    .btn.dark{background:#111;color:#fff}
+    .btn.light{background:#eee;color:#111}
+    .muted{color:var(--muted);font-size:13px}
+
+    .total{margin-top:14px;font-weight:900;font-size:16px;display:flex;justify-content:space-between}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+
+    /* Screenshot mode */
+    body.screenshot header,
+    body.screenshot .actions,
+    body.screenshot .back,
+    body.screenshot .muted.smallhide{display:none !important;}
+    body.screenshot .wrap{padding-top:10px}
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="bobby-black.png" class="brand-logo" alt="Bobby Black Exclusive" />
+    <div class="subtitle">Cart (Screenshot Only)</div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to Menu</a>
+
+    <div class="muted smallhide">
+      Build your cart here, then tap <b>Screenshot View</b> to take a clean screenshot and share.
+      No checkout or ordering on this site.
+    </div>
+
+    <div id="cartList"></div>
+
+    <div class="card">
+      <div class="total">
+        <div>Subtotal</div>
+        <div id="subtotal">$0</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn light" id="clearCart">Clear Cart</button>
+        <button class="btn dark" id="screenshotMode">Screenshot View</button>
+        <button class="btn light" id="exitScreenshot" style="display:none;">Exit Screenshot</button>
+      </div>
+
+      <div class="muted" style="margin-top:10px;">
+        Tip: On iPhone/Android, screenshot normally. On desktop, use the browser screenshot tool.
+      </div>
+    </div>
+  </div>
+
+  <script src="cart.js"></script>
+  <script>
+    function money(n){ return BBE_CART.money(n); }
+
+    function render(){
+      const list = document.getElementById("cartList");
+      const cart = BBE_CART.loadCart();
+
+      list.innerHTML = "";
+
+      if(cart.length === 0){
+        list.innerHTML = `<div class="card"><div class="muted">Your cart is empty.</div></div>`;
+        document.getElementById("subtotal").textContent = "$0";
+        return;
+      }
+
+      let subtotal = 0;
+
+      cart.forEach((line, idx) => {
+        const qty = Number(line.qty) || 0;
+        const price = Number(line.unitPrice) || 0;
+        const lineTotal = qty * price;
+        subtotal += lineTotal;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="row">
+            <div style="flex:1;">
+              <div class="name">${line.name}</div>
+              <div class="meta">
+                ${line.category}${line.subcategory ? " • " + line.subcategory : ""}${line.variantLabel ? " • " + line.variantLabel : ""}
+              </div>
+              <div class="meta">${money(price)} each</div>
+            </div>
+
+            <div class="qty">
+              <button class="btn light" data-dec="${idx}">−</button>
+              <div style="min-width:24px;text-align:center;font-weight:900;">${qty}</div>
+              <button class="btn light" data-inc="${idx}">+</button>
+            </div>
+          </div>
+
+          <div class="total" style="margin-top:10px;font-size:14px;">
+            <div class="muted">Line total</div>
+            <div>${money(lineTotal)}</div>
+          </div>
+
+          <div class="actions" style="margin-top:10px;">
+            <button class="btn light" data-remove="${idx}">Remove</button>
+          </div>
+        `;
+
+        list.appendChild(card);
+      });
+
+      document.getElementById("subtotal").textContent = money(subtotal);
+
+      // Wire buttons
+      list.querySelectorAll("[data-inc]").forEach(btn=>{
+        btn.onclick = () => {
+          const i = Number(btn.getAttribute("data-inc"));
+          const cart = BBE_CART.loadCart();
+          cart[i].qty = (Number(cart[i].qty)||0) + 1;
+          BBE_CART.saveCart(cart);
+          render();
+        };
+      });
+
+      list.querySelectorAll("[data-dec]").forEach(btn=>{
+        btn.onclick = () => {
+          const i = Number(btn.getAttribute("data-dec"));
+          const cart = BBE_CART.loadCart();
+          cart[i].qty = Math.max(1, (Number(cart[i].qty)||1) - 1);
+          BBE_CART.saveCart(cart);
+          render();
+        };
+      });
+
+      list.querySelectorAll("[data-remove]").forEach(btn=>{
+        btn.onclick = () => {
+          const i = Number(btn.getAttribute("data-remove"));
+          const cart = BBE_CART.loadCart();
+          cart.splice(i,1);
+          BBE_CART.saveCart(cart);
+          render();
+        };
+      });
+    }
+
+    document.getElementById("clearCart").onclick = () => {
+      if(confirm("Clear your cart?")){
+        BBE_CART.saveCart([]);
+        render();
+      }
+    };
+
+    document.getElementById("screenshotMode").onclick = () => {
+      document.body.classList.add("screenshot");
+      document.getElementById("exitScreenshot").style.display = "inline-block";
+      document.getElementById("screenshotMode").style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    document.getElementById("exitScreenshot").onclick = () => {
+      document.body.classList.remove("screenshot");
+      document.getElementById("exitScreenshot").style.display = "none";
+      document.getElementById("screenshotMode").style.display = "inline-block";
+    };
+
+    render();
+  </script>
+</body>
+</html>
