@@ -91,11 +91,13 @@
       padding:14px;
     }
 
+    /* ✅ Only keep the right-side category badge (no THC badge) */
     .top-badges{
       display:flex;
       gap:10px;
       align-items:center;
       margin-bottom:10px;
+      justify-content:flex-end;
     }
     .badge{
       font-size:12px;
@@ -105,13 +107,12 @@
       padding:8px 10px;
       border-radius:4px;
       border:1px solid var(--line);
-      background:#fff8cc;
+      background:#fff;
     }
     .badge.type{
       background:#2a2f3a;
       color:#fff;
       border-color:#2a2f3a;
-      margin-left:auto;
       min-width:140px;
       text-align:center;
     }
@@ -143,7 +144,7 @@
 
     .size-row{display:flex;gap:10px;align-items:center;margin-top:6px}
     .size-select{
-      flex:0 0 120px;
+      flex:0 0 140px;
       border:1px solid var(--line);
       border-radius:3px;
       padding:12px 10px;
@@ -220,13 +221,6 @@
 
     hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0}
 
-    .section-title{
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      margin-bottom:6px;
-    }
     .about-title{
       font-size:12px;
       font-weight:900;
@@ -247,6 +241,14 @@
       line-height:1.55;
       color:#333;
       white-space:pre-line;
+    }
+
+    .section-title{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin-bottom:6px;
     }
 
     .effects-grid{
@@ -273,29 +275,6 @@
       display:inline-flex;align-items:center;justify-content:center;
       font-size:11px;color:#777;
     }
-
-    .canna{
-      border:1px solid var(--line);
-      border-radius:6px;
-      overflow:hidden;
-      background:#fff;
-    }
-    .canna-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:10px 12px;
-      font-size:12px;
-      border-top:1px solid var(--line);
-    }
-    .canna-row:first-child{border-top:0}
-    .canna-label{
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      color:#333;
-    }
-    .canna-val{font-weight:900;color:#111}
 
     /* Age gate */
     .age-gate{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px}
@@ -349,7 +328,6 @@
 
       <div class="info">
         <div class="top-badges">
-          <div class="badge" id="thcBadge">THC: —</div>
           <div class="badge type" id="typeBadge">—</div>
         </div>
 
@@ -398,10 +376,7 @@
         <div class="section-title">EFFECTS</div>
         <div class="effects-grid" id="effectsGrid"></div>
 
-        <hr class="sep" />
-
-        <div class="section-title">CANNABINOIDS</div>
-        <div class="canna" id="cannaBox"></div>
+        <!-- ✅ Cannabinoids removed -->
       </div>
     </div>
   </div>
@@ -422,14 +397,16 @@
       if(n===null || n===undefined || n==="" || isNaN(Number(n))) return "N/A";
       return "$" + Number(n).toFixed(0);
     }
-    function pct(n){
-      if(n===null || n===undefined || n==="" || isNaN(Number(n))) return "—";
-      return Number(n).toFixed(1).replace(/\.0$/,"") + "%";
-    }
     function safeUpper(s){ return (s || "—").toString().toUpperCase(); }
     function getId(){ return new URLSearchParams(location.search).get("id"); }
 
-    // ✅ IMAGE FALLBACKS
+    // ✅ If product.html opened without ?id=..., send them back
+    const id = getId();
+    if(!id){
+      window.location.replace("flower.html");
+    }
+
+    // ✅ IMAGE FALLBACKS (includes your real id: crazzzy)
     const IMAGE_MAP = {
       "adl": "ADL.JPG",
       "cherry-candy": "CherryCandy.JPG",
@@ -441,8 +418,11 @@
       "sugar-shock": "SugarShock.JPG",
       "zaamatic": "Zaamatic.JPG",
       "blow-pop": "BlowPop.JPG",
+
+      "crazzzy": "Crrazzy.JPG",   // ✅ products.json id
       "crazzy": "Crrazzy.JPG",
       "crazzyy": "Crrazzy.JPG",
+
       "fruit-snacks": "FruitStripes.JPG",
       "ready-to-trap": "ReadytoTrap.JPG",
       "sherbert": "Sherbet.JPG",
@@ -451,6 +431,7 @@
     };
 
     const NAME_MAP = {
+      "crazzzy": "Crrazzy.JPG",
       "crazzyy": "Crrazzy.JPG",
       "crazzy": "Crrazzy.JPG",
       "adl": "ADL.JPG",
@@ -487,10 +468,8 @@
     }
 
     // UI refs
-    const id = getId();
     const imgPanel = document.getElementById("imgPanel");
     const crumbTrail = document.getElementById("crumbTrail");
-    const thcBadge = document.getElementById("thcBadge");
     const typeBadge = document.getElementById("typeBadge");
     const productTitle = document.getElementById("productTitle");
     const brandLine = document.getElementById("brandLine");
@@ -503,7 +482,6 @@
     const aboutBy = document.getElementById("aboutBy");
     const aboutText = document.getElementById("aboutText");
     const effectsGrid = document.getElementById("effectsGrid");
-    const cannaBox = document.getElementById("cannaBox");
 
     let currentItem = null;
 
@@ -578,22 +556,6 @@
       });
     }
 
-    function renderCannabinoids(item){
-      cannaBox.innerHTML = "";
-      const rows = [];
-      if(item.tacPercent !== undefined) rows.push({ label: '"TAC" - Total Active Cannabinoids', val: pct(item.tacPercent) });
-      if(item.thcPercent !== undefined) rows.push({ label: "THC", val: pct(item.thcPercent) });
-      if(item.cbdPercent !== undefined) rows.push({ label: "CBD", val: pct(item.cbdPercent) });
-      if(rows.length === 0) rows.push({ label: "Cannabinoids", val: "—" });
-
-      rows.forEach(r=>{
-        const row = document.createElement("div");
-        row.className = "canna-row";
-        row.innerHTML = `<div class="canna-label">${r.label}</div><div class="canna-val">${r.val}</div>`;
-        cannaBox.appendChild(row);
-      });
-    }
-
     function renderImage(item){
       const imgPath = resolveImage(item);
       if(!imgPath){
@@ -627,8 +589,6 @@
         currentItem = item;
 
         crumbTrail.textContent = `HOME • ${safeUpper(item.category)} • ${safeUpper(item.subcategory || "ITEM")}`;
-
-        thcBadge.textContent = `THC: ${item.thcPercent !== undefined ? pct(item.thcPercent) : "—"}`;
         typeBadge.textContent = safeUpper(item.type || item.category);
 
         const brand = item.brand || "Bobby Black Exclusive";
@@ -647,7 +607,6 @@
         sizeSelect.addEventListener("change", renderPrice);
 
         renderEffects(item);
-        renderCannabinoids(item);
 
         addBtn.onclick = () => {
           const qty = Number(qtySelect.value || 1);
@@ -655,6 +614,11 @@
             BBE_CART.openAddFlow(item.id, "content/products.json");
           }
         };
+      })
+      .catch(err=>{
+        productTitle.textContent = "ERROR";
+        brandLine.textContent = "Could not load products.json.";
+        console.error(err);
       });
   </script>
 
