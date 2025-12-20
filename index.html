@@ -11,8 +11,13 @@
       --text:#111;
       --muted:#666;
       --card:#fff;
-      --border:#eaeaea;
+      --border:rgba(0,0,0,0.10);
       --shadow:0 14px 40px rgba(0,0,0,.12);
+
+      /* Luxury accents */
+      --gold:#D4AF37;
+      --gold-soft:rgba(212,175,55,0.35);
+      --black:#0E0E0E;
     }
     *{box-sizing:border-box}
     body{
@@ -24,17 +29,18 @@
 
     header{
       text-align:center;
-      padding:36px 16px 24px;
+      padding:34px 16px 18px;
     }
     .brand-logo{
-      max-width:300px;
-      width:80%;
+      max-width:320px;
+      width:78%;
       display:block;
       margin:0 auto;
+      height:auto;
     }
     .subtitle{
       margin-top:12px;
-      font-size:14px;
+      font-size:13px;
       letter-spacing:3px;
       text-transform:uppercase;
       color:var(--muted);
@@ -43,14 +49,14 @@
     .wrap{
       max-width:1100px;
       margin:0 auto;
-      padding:20px 16px 60px;
+      padding:18px 16px 40px;
     }
 
     .menu-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:24px;
-      margin-top:30px;
+      gap:22px;
+      margin-top:26px;
     }
 
     .menu-card{
@@ -58,25 +64,36 @@
       border:1px solid var(--border);
       box-shadow:var(--shadow);
       border-radius:999px;
-      padding:36px 24px;
+      padding:34px 22px;
       text-align:center;
       font-weight:900;
       font-size:18px;
       text-decoration:none;
       color:#111;
-      transition:transform .12s ease, box-shadow .12s ease;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .18s ease;
+      position:relative;
+      overflow:hidden;
     }
 
+    /* subtle gold ring on hover */
     .menu-card:hover{
       transform:translateY(-4px);
       box-shadow:0 22px 60px rgba(0,0,0,.18);
+      border-color:var(--gold-soft);
+    }
+    .menu-card:focus{
+      outline:none;
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(212,175,55,.18), 0 22px 60px rgba(0,0,0,.18);
     }
 
     footer{
       text-align:center;
-      padding:20px;
-      font-size:14px;
-      color:var(--muted);
+      padding:18px 14px 28px;
+      font-size:11px;
+      color:#777;
+      border-top:1px solid var(--border);
+      background:#fff;
     }
 
     /* Age Gate */
@@ -93,17 +110,30 @@
     .age-gate.show{display:flex}
     .age-card{
       background:#fff;
-      max-width:420px;
+      max-width:460px;
       width:100%;
       border-radius:20px;
-      padding:26px;
+      padding:24px 22px;
       text-align:center;
       box-shadow:0 24px 80px rgba(0,0,0,.35);
+      border:1px solid rgba(0,0,0,0.12);
+    }
+    .age-logo{
+      width:120px;
+      height:auto;
+      display:block;
+      margin:0 auto 12px;
     }
     .age-title{
       font-size:22px;
       font-weight:900;
       margin-bottom:10px;
+    }
+    .age-sub{
+      font-size:12px;
+      color:#666;
+      line-height:1.5;
+      margin:12px 0 0;
     }
     .age-actions{
       display:grid;
@@ -112,15 +142,35 @@
       margin-top:18px;
     }
     .age-btn{
-      border:0;
+      border:1px solid rgba(0,0,0,0.15);
       border-radius:999px;
-      padding:14px;
+      padding:13px 14px;
       font-weight:900;
       cursor:pointer;
       font-size:14px;
+      background:#fff;
+      transition:all .18s ease;
     }
-    .age-btn.yes{background:#111;color:#fff}
-    .age-btn.no{background:#eee;color:#111}
+    .age-btn.yes{
+      background:var(--black);
+      color:#fff;
+      border-color:var(--black);
+    }
+    .age-btn.yes:hover{
+      background:#fff;
+      color:var(--black);
+      border-color:var(--gold);
+    }
+    .age-btn.no{
+      background:#eee;
+      color:#111;
+      border-color:#eee;
+    }
+    .age-btn.no:hover{
+      background:#fff;
+      color:var(--gold);
+      border-color:var(--gold);
+    }
 
     @media(max-width:900px){
       .menu-grid{grid-template-columns:1fr}
@@ -138,17 +188,24 @@
 <!-- Age Gate -->
 <div id="ageGate" class="age-gate">
   <div class="age-card">
+    <!-- ✅ BBE.png logo inside the age verify modal -->
+    <img src="images/BBE.png" class="age-logo" alt="Bobby Black Exclusive" />
     <div class="age-title">21+ Only</div>
     <p>Please confirm you are 21 years of age or older.</p>
     <div class="age-actions">
       <button class="age-btn yes" id="ageYes">I’m 21+</button>
       <button class="age-btn no" id="ageNo">No</button>
     </div>
+    <p class="age-sub">
+      All products, pricing, and descriptions are provided for reference only.
+      No transactions, checkout, or delivery occur through this site.
+    </p>
   </div>
 </div>
 
 <header>
-  <img src="Bobbyb.png" alt="Bobby Black Exclusive" class="brand-logo" />
+  <!-- ✅ Home + category pages use BBE.png -->
+  <img src="images/BBE.png" alt="Bobby Black Exclusive" class="brand-logo" />
   <div class="subtitle">Menu</div>
 </header>
 
@@ -161,7 +218,8 @@
 </div>
 
 <footer>
-  Updated Weekly • 21+
+  All products, pricing, and descriptions are provided for reference only.
+  No transactions, checkout, or delivery occur through this site. • Updated Weekly • 21+
 </footer>
 
 <script>
