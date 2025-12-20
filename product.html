@@ -35,7 +35,7 @@
     .wrap{
       max-width:1080px;
       margin:0 auto;
-      padding:14px 14px 60px;
+      padding:14px 14px 28px; /* slightly reduced so footer feels connected */
     }
 
     .crumb{
@@ -286,6 +286,31 @@
     .age-btn.yes{background:#111;color:#fff}
     .age-btn.no{background:#eee;color:#111}
 
+    /* ✅ Disclaimer text inside age gate */
+    .age-disclaimer{
+      margin:10px 0 0;
+      font-size:12px;
+      line-height:1.35;
+      color:#444;
+    }
+
+    /* ✅ Footer disclaimer */
+    footer{
+      text-align:center;
+      padding:18px 12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .footer-disclaimer{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.35;
+      color:var(--muted);
+      max-width:920px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
     @media(max-width:900px){
       .grid{grid-template-columns:1fr}
       .img-panel{min-height:360px}
@@ -304,6 +329,9 @@
     <div class="age-card">
       <div class="age-title">21+ Only</div>
       <p>Please confirm you are 21 years of age or older.</p>
+      <p class="age-disclaimer">
+        Reference only. No online ordering, checkout, delivery, or payments. Prices and availability may change.
+      </p>
       <div class="age-actions">
         <button class="age-btn yes" id="ageYes">I’m 21+</button>
         <button class="age-btn no" id="ageNo">No</button>
@@ -381,6 +409,13 @@
     </div>
   </div>
 
+  <footer>
+    <div>Updated Weekly • 21+</div>
+    <div class="footer-disclaimer">
+      Reference only. No online ordering, checkout, delivery, or payments. Prices and availability may change.
+    </div>
+  </footer>
+
   <script>
     BBE_CART.mountCartPill();
 
@@ -419,7 +454,7 @@
       "zaamatic": "Zaamatic.JPG",
       "blow-pop": "BlowPop.JPG",
 
-      "crazzzy": "Crrazzy.JPG",   // ✅ products.json id
+      "crazzzy": "Crrazzy.JPG",
       "crazzy": "Crrazzy.JPG",
       "crazzyy": "Crrazzy.JPG",
 
