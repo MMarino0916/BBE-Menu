@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -133,6 +133,12 @@
     document.getElementById("ageNo").onclick=()=>{window.location.href="https://www.google.com"}
   })();
 
+  // ✅ SINGLE navigation function (fixes the mismatch)
+  function openProduct(id){
+    const url = "product.html?id=" + encodeURIComponent(id);
+    window.location.assign(url);
+  }
+
   function money(n){ return "$" + Number(n).toFixed(0); }
   function sizeLabel(k){ return k==="g3_5"?"3.5g":k==="g7"?"7g":k==="g14"?"14g":"28g"; }
 
@@ -151,7 +157,6 @@
   }
 
   // Image filenames (must exist in /images/)
-  // We support both old and new ids for CRAZZYY to avoid breakage.
   const IMAGE_MAP = {
     "adl": "ADL.JPG",
     "cherry-candy": "CherryCandy.JPG",
@@ -163,19 +168,25 @@
     "sugar-shock": "SugarShock.JPG",
     "zaamatic": "Zaamatic.JPG",
     "blow-pop": "BlowPop.JPG",
+
+    // ✅ IMPORTANT: your products.json uses id = "crazzzy"
+    "crazzzy": "Crrazzy.JPG",
+
+    // extra safety if you ever change ids:
     "crazzy": "Crrazzy.JPG",
-    "crazzyy": "Crrazzy.JPG",      // ✅ if you changed id to crazzyy
-    "crazzyyy": "Crrazzy.JPG",     // ✅ extra safety if you triple-typed
+    "crazzyy": "Crrazzy.JPG",
+    "crazzyyy": "Crrazzy.JPG",
+
     "fruit-snacks": "FruitStripes.JPG",
     "ready-to-trap": "ReadytoTrap.JPG",
     "sherbert": "Sherbet.JPG",
     "verzace": "Verzace.JPG"
   };
 
-  // Name-based fallback map (in case id doesn't match)
   const NAME_MAP = {
     "crazzyy": "Crrazzy.JPG",
     "crazzy": "Crrazzy.JPG",
+    "crazzzy": "Crrazzy.JPG",
     "adl": "ADL.JPG",
     "cherrycandy": "CherryCandy.JPG",
     "chroniccandy": "ChronicCandy.JPG",
@@ -193,9 +204,7 @@
   };
 
   function normalizeKey(s){
-    return String(s||"")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g,""); // remove spaces/punctuation
+    return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
   }
 
   function getImageForItem(item){
@@ -253,7 +262,7 @@
         groups[groupName].forEach(item=>{
           const div=document.createElement("div");
           div.className="item";
-          div.onclick=()=>location.href="product.html?id="+encodeURIComponent(item.id);
+          div.onclick=()=>openProduct(item.id);   // ✅ unified
 
           const thumb=document.createElement("div");
           thumb.className="thumb";
@@ -315,7 +324,7 @@
           viewBtn.textContent="View";
           viewBtn.onclick=(e)=>{
             e.stopPropagation();
-            location.href="product.html?id="+encodeURIComponent(item.id);
+            openProduct(item.id);  // ✅ unified
           };
 
           actions.appendChild(addBtn);
