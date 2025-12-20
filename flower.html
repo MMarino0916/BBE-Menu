@@ -114,15 +114,54 @@
     document.getElementById("ageNo").onclick=()=>{window.location.href="https://www.google.com"}
   })();
 
-  function money(n){ return "$"+Number(n).toFixed(0) }
-  function sizeLabel(k){ return k==="g3_5"?"3.5g":k==="g7"?"7g":k==="g14"?"14g":"28g" }
+  function money(n){
+    return "$" + Number(n).toFixed(0);
+  }
+
+  function sizeLabel(k){
+    if(k==="g3_5") return "3.5g";
+    if(k==="g7") return "7g";
+    if(k==="g14") return "14g";
+    return "28g";
+  }
+
+  function showPriceOrNA(item, k){
+    const available = item.availability?.[k] !== false;
+    const price = item.prices?.[k];
+    const hasPrice = price !== null && price !== undefined && price !== "";
+    if(available && hasPrice) return money(price);
+    return "N/A";
+  }
+
+  // Put your preferred category order here (optional)
+  const GROUP_ORDER = [
+    "BOBBY BLACK EXCLUSIVE",
+    "CA$$H RULE$",
+    "LOOSE LINEUP"
+  ];
+
+  function groupSortKey(name){
+    const idx = GROUP_ORDER.indexOf(name);
+    return idx === -1 ? 999 : idx;
+  }
 
   fetch("content/products.json",{cache:"no-store"})
     .then(r=>r.json())
     .then(data=>{
-      const items=(data.items||[]).filter(i=>i.category==="Flower");
-      const groups={};
+      const items=(data.items||[])
+        .filter(i=>i.category==="Flower")
+        .slice()
+        .sort((a,b)=>{
+          const ga=(a.subcategory||"Other");
+          const gb=(b.subcategory||"Other");
+          const ka=groupSortKey(ga);
+          const kb=groupSortKey(gb);
+          if(ka!==kb) return ka-kb;
+          if(ga!==gb) return ga.localeCompare(gb);
+          return (a.name||"").localeCompare(b.name||"");
+        });
 
+      const groups={};
       items.forEach(i=>{
         const key=i.subcategory||"Other";
         if(!groups[key]) groups[key]=[];
@@ -132,7 +171,13 @@
       const container=document.getElementById("menu");
       container.innerHTML = "";
 
-      Object.keys(groups).forEach(groupName=>{
+      // Preserve group order (then any extras)
+      const groupNames = [
+        ...GROUP_ORDER.filter(g=>groups[g]),
+        ...Object.keys(groups).filter(g=>!GROUP_ORDER.includes(g)).sort()
+      ];
+
+      groupNames.forEach(groupName=>{
         const group=document.createElement("div");
         group.className="group";
 
@@ -163,11 +208,9 @@
           prices.className="prices";
 
           ["g3_5","g7","g14","g28"].forEach(k=>{
-            const available=item.availability?.[k]!==false;
-            const price=item.prices?.[k];
             const p=document.createElement("span");
             p.className="price";
-            p.textContent=sizeLabel(k)+": "+(available && price ? money(price) : "N/A");
+            p.textContent=sizeLabel(k)+": "+showPriceOrNA(item, k);
             prices.appendChild(p);
           });
 
@@ -204,6 +247,11 @@
 
         container.appendChild(group);
       });
+    })
+    .catch(err=>{
+      document.getElementById("menu").innerHTML =
+        "<div style='color:#b00000;font-weight:900'>Error loading products.json</div>";
+      console.error(err);
     });
 </script>
 
