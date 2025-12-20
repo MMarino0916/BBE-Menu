@@ -27,17 +27,21 @@
       color:var(--text);
     }
 
-    header{
+    /* ✅ Full-width black header bar (product page uses Bobbyb.png) */
+    .site-header{
+      background:#000;
+      width:100%;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:14px 16px;
-      background:#fff;
-      border-bottom:1px solid var(--line);
+      padding:22px 16px 18px;
+      border-bottom:1px solid var(--gold-soft);
     }
     .brand-logo{
-      height:36px;width:auto;display:block;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,.15));
+      height:44px;
+      width:auto;
+      display:block;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
     }
 
     .wrap{
@@ -183,7 +187,7 @@
     }
     .size-select:hover{border-color:var(--gold)}
 
-    /* ✅ Gold hover underline on PRICE */
+    /* Gold hover underline on PRICE */
     .price{
       font-size:34px;
       font-weight:900;
@@ -277,7 +281,7 @@
     }
     .subnote:hover{border-color:var(--gold-soft)}
 
-    /* ✅ Gold dividers */
+    /* Gold dividers */
     hr.sep{
       border:0;
       height:1px;
@@ -285,7 +289,7 @@
       background:linear-gradient(90deg, rgba(212,175,55,0), rgba(212,175,55,.55), rgba(212,175,55,0));
     }
 
-    /* ✅ Section titles get a gold underline accent */
+    /* Section titles get a gold underline accent */
     .section-title{
       font-size:12px;
       font-weight:900;
@@ -366,12 +370,19 @@
     .age-gate.show{display:flex}
     .age-card{
       background:#fff;
-      max-width:440px;width:100%;
+      max-width:460px;width:100%;
       border-radius:18px;
       padding:22px;
       text-align:center;
       box-shadow:0 20px 60px rgba(0,0,0,.35);
       border:1px solid rgba(0,0,0,0.12);
+    }
+    .age-logo{
+      width:180px;
+      max-width:70%;
+      height:auto;
+      display:block;
+      margin:0 auto 10px;
     }
     .age-title{font-size:22px;font-weight:900;margin-bottom:8px}
     .age-sub{font-size:12px;color:#666;line-height:1.5;margin:10px 0 0}
@@ -429,6 +440,8 @@
   <!-- Age Gate -->
   <div id="ageGate" class="age-gate">
     <div class="age-card">
+      <!-- ✅ Age gate uses BBE.png -->
+      <img src="images/BBE.png" class="age-logo" alt="Bobby Black Exclusive" />
       <div class="age-title">21+ Only</div>
       <p>Please confirm you are 21 years of age or older.</p>
       <div class="age-actions">
@@ -442,9 +455,10 @@
     </div>
   </div>
 
-<header>
-  <img src="images/Bobbyb.png" class="brand-logo" alt="Bobby Black Exclusive" />
-</header>
+  <!-- ✅ Black header bar behind the word logo -->
+  <header class="site-header">
+    <img src="images/Bobbyb.png" class="brand-logo" alt="Bobby Black Exclusive" />
+  </header>
 
   <div class="wrap">
     <div class="crumb">
