@@ -14,9 +14,10 @@
       --card:#ffffff;
       --black:#0E0E0E;
 
-      /* Luxury hover accents */
+      /* Luxury accents */
       --gold:#D4AF37;
       --gold-soft:rgba(212,175,55,0.35);
+      --gold-faint:rgba(212,175,55,0.18);
     }
     *{box-sizing:border-box}
     body{
@@ -34,7 +35,10 @@
       background:#fff;
       border-bottom:1px solid var(--line);
     }
-    .brand-logo{height:34px;width:auto;display:block}
+    .brand-logo{
+      height:36px;width:auto;display:block;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.15));
+    }
 
     .wrap{
       max-width:1080px;
@@ -79,9 +83,12 @@
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      transition:border-color .18s ease;
+      transition:border-color .18s ease, box-shadow .18s ease;
     }
-    .img-panel:hover{border-color:var(--gold-soft)}
+    .img-panel:hover{
+      border-color:var(--gold-soft);
+      box-shadow:0 14px 34px rgba(0,0,0,.10);
+    }
     .img-panel img{
       width:100%;
       height:auto;
@@ -104,9 +111,12 @@
       border:1px solid var(--line);
       border-radius:10px;
       padding:14px;
-      transition:border-color .18s ease;
+      transition:border-color .18s ease, box-shadow .18s ease;
     }
-    .info:hover{border-color:var(--gold-soft)}
+    .info:hover{
+      border-color:var(--gold-soft);
+      box-shadow:0 14px 34px rgba(0,0,0,.10);
+    }
 
     /* Only keep category badge (no THC badge) */
     .top-badges{
@@ -173,11 +183,26 @@
     }
     .size-select:hover{border-color:var(--gold)}
 
+    /* ✅ Gold hover underline on PRICE */
     .price{
       font-size:34px;
       font-weight:900;
       margin:12px 0 12px;
+      display:inline-block;
+      position:relative;
+      padding-bottom:4px;
     }
+    .price:after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:0%;
+      height:2px;
+      background:linear-gradient(90deg, var(--gold), rgba(212,175,55,0));
+      transition:width .22s ease;
+    }
+    .info:hover .price:after{width:100%}
 
     .buy-row{
       display:grid;
@@ -216,6 +241,7 @@
       background:#fff;
       color:var(--black);
       border-color:var(--gold);
+      box-shadow:0 10px 22px rgba(0,0,0,.10);
     }
     .add-btn:active{transform:translateY(1px)}
     .add-icon{
@@ -251,7 +277,27 @@
     }
     .subnote:hover{border-color:var(--gold-soft)}
 
-    hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+    /* ✅ Gold dividers */
+    hr.sep{
+      border:0;
+      height:1px;
+      margin:14px 0;
+      background:linear-gradient(90deg, rgba(212,175,55,0), rgba(212,175,55,.55), rgba(212,175,55,0));
+    }
+
+    /* ✅ Section titles get a gold underline accent */
+    .section-title{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin-bottom:6px;
+      display:inline-block;
+      padding-bottom:4px;
+      border-bottom:2px solid transparent;
+      transition:border-color .18s ease;
+    }
+    .info:hover .section-title{border-bottom-color:var(--gold-faint)}
 
     .about-title{
       font-size:12px;
@@ -260,7 +306,13 @@
       letter-spacing:1px;
       color:#111;
       margin-bottom:6px;
+      display:inline-block;
+      padding-bottom:4px;
+      border-bottom:2px solid rgba(212,175,55,0.0);
+      transition:border-color .18s ease;
     }
+    .info:hover .about-title{border-bottom-color:var(--gold-faint)}
+
     .about-by{
       font-size:11px;
       color:var(--muted);
@@ -273,14 +325,6 @@
       line-height:1.55;
       color:#333;
       white-space:pre-line;
-    }
-
-    .section-title{
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      margin-bottom:6px;
     }
 
     .effects-grid{
@@ -301,9 +345,12 @@
       display:flex;
       gap:8px;
       align-items:center;
-      transition:border-color .18s ease;
+      transition:border-color .18s ease, box-shadow .18s ease;
     }
-    .effect:hover{border-color:var(--gold)}
+    .effect:hover{
+      border-color:var(--gold);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+    }
     .effect .icon{
       width:18px;height:18px;border:1px solid #ccc;border-radius:4px;
       display:inline-flex;align-items:center;justify-content:center;
@@ -396,7 +443,8 @@
   </div>
 
   <header>
-    <img src="bobby-black.png" class="brand-logo" alt="Bobby Black Exclusive" />
+    <!-- ✅ updated to new compact logo -->
+    <img src="images/BBE.png" class="brand-logo" alt="Bobby Black Exclusive" />
   </header>
 
   <div class="wrap">
