@@ -27,7 +27,7 @@
       color:var(--text);
     }
 
-    /* ===== Header (NEW: solid black bar behind logo) ===== */
+    /* ===== Header ===== */
     header{
       background: var(--black);
       width:100%;
@@ -41,7 +41,6 @@
       height:44px;
       width:auto;
       display:block;
-      /* subtle lift on dark bg */
       filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
     }
 
@@ -58,6 +57,7 @@
       display:flex;
       gap:10px;
       align-items:center;
+      flex-wrap:wrap;
     }
     .crumb a{
       color:var(--muted);
@@ -123,13 +123,28 @@
       box-shadow:0 14px 34px rgba(0,0,0,.10);
     }
 
+    /* ✅ top row: Cassh logo on left (only for Cassh items), type badge on right */
     .top-badges{
       display:flex;
       gap:10px;
       align-items:center;
       margin-bottom:10px;
-      justify-content:flex-end;
+      justify-content:space-between;
     }
+
+    .cassh-inline{
+      display:none;
+      align-items:center;
+      gap:10px;
+      min-height:34px;
+    }
+    .cassh-inline img{
+      height:34px;
+      width:auto;
+      display:block;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.10));
+    }
+
     .badge{
       font-size:12px;
       font-weight:900;
@@ -165,9 +180,9 @@
       margin-bottom:10px;
     }
 
-    /* ===== CA$$H RULE$ badge (NEW) ===== */
+    /* ✅ CA$$H RULE$ logo UNDER title (only shown when applicable) */
     .collection-wrap{
-      display:none; /* shown only when applicable */
+      display:none;
       margin:10px 0 4px;
       padding:10px 10px;
       border:1px solid rgba(212,175,55,.18);
@@ -438,6 +453,7 @@
       .badge.type{min-width:120px}
       .brand-logo{height:40px}
       .collection-logo{height:42px}
+      .cassh-inline img{height:30px}
     }
   </style>
 
@@ -480,12 +496,17 @@
 
       <div class="info">
         <div class="top-badges">
+          <!-- ✅ inline Cassh logo (only when Cassh item) -->
+          <div class="cassh-inline" id="casshInline">
+            <img id="casshInlineImg" src="images/CasshrulesOfficial.png" alt="CA$$H RULE$" />
+          </div>
+
           <div class="badge type" id="typeBadge">—</div>
         </div>
 
         <div class="title" id="productTitle">Loading…</div>
 
-        <!-- CA$$H RULE$ secondary logo (only shown when applicable) -->
+        <!-- ✅ Cassh logo under title (only shown when Cassh item) -->
         <div class="collection-wrap" id="casshWrap">
           <img
             id="casshLogo"
@@ -646,6 +667,8 @@
 
     const casshWrap = document.getElementById("casshWrap");
     const casshLogo = document.getElementById("casshLogo");
+    const casshInline = document.getElementById("casshInline");
+    const casshInlineImg = document.getElementById("casshInlineImg");
 
     let currentItem = null;
 
@@ -665,7 +688,7 @@
           const opt = document.createElement("option");
           opt.value = s.key;
           opt.textContent = s.label;
-          opt.disabled = !(available && p !== null && p !== undefined);
+          opt.disabled = !(available && p !== null && p !== undefined && p !== "");
           sizeSelect.appendChild(opt);
         });
         const firstEnabled = Array.from(sizeSelect.options).find(o=>!o.disabled);
@@ -736,16 +759,29 @@
       imgPanel.appendChild(img);
     }
 
+    /* ✅ robust Cassh detection (handles CA$$H RULE$, CA$H RULE$, etc.) */
+    function isCasshRules(item){
+      const sub = (item.subcategory || "").trim();
+      const norm = sub.toLowerCase().replace(/[^a-z0-9]/g,""); // "casshrules"
+      return sub === "CA$$H RULE$" || sub === "CA$H RULE$" || norm === "casshrules";
+    }
+
     function applyCasshRulesBranding(item){
-      // Show CA$$H RULE$ logo ONLY when the product belongs to CA$H RULE$
-      const isCassh = (item.subcategory || "").trim() === "CA$H RULE$";
-      if(isCassh){
+      const cassh = isCasshRules(item);
+
+      if(cassh){
         casshWrap.style.display = "block";
-        // If the file path/case is wrong, hide gracefully so it doesn't look broken
+        casshInline.style.display = "flex";
+
+        // hide gracefully if the image path/case is wrong
         casshLogo.onerror = () => { casshWrap.style.display = "none"; };
+        casshInlineImg.onerror = () => { casshInline.style.display = "none"; };
       } else {
         casshWrap.style.display = "none";
+        casshInline.style.display = "none";
       }
+
+      return cassh;
     }
 
     fetch("content/products.json", { cache:"no-store" })
@@ -764,19 +800,23 @@
 
         currentItem = item;
 
+        // Cassh branding first (also returns bool)
+        const cassh = applyCasshRulesBranding(item);
+
         crumbTrail.textContent = `HOME • ${safeUpper(item.category)} • ${safeUpper(item.subcategory || "ITEM")}`;
         typeBadge.textContent = safeUpper(item.type || item.category);
 
-        const brand = item.brand || "Bobby Black Exclusive";
-        productTitle.textContent = `${safeUpper(brand)} | ${safeUpper(item.name)}`;
-        brandLine.textContent = brand.toUpperCase();
+        // ✅ Change display name for Cassh products
+        const displayBrand = cassh ? "CA$$H RULE$" : (item.brand || "Bobby Black Exclusive");
+
+        productTitle.textContent = `${safeUpper(displayBrand)} | ${safeUpper(item.name)}`;
+        brandLine.textContent = displayBrand.toUpperCase();
         ratingText.textContent = "0";
 
-        applyCasshRulesBranding(item);
         renderImage(item);
 
-        aboutTitle.textContent = `ABOUT: ${safeUpper(brand)} | ${safeUpper(item.name)}`;
-        aboutBy.textContent = `BY: ${brand.toUpperCase()}`;
+        aboutTitle.textContent = `ABOUT: ${safeUpper(displayBrand)} | ${safeUpper(item.name)}`;
+        aboutBy.textContent = `BY: ${displayBrand.toUpperCase()}`;
         aboutText.textContent = item.description || "Description coming soon.";
 
         buildSizeOptions(item);
