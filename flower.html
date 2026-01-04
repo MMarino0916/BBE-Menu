@@ -48,7 +48,7 @@
 
     .back{
       display:inline-block;
-      margin-bottom:16px;
+      margin-bottom:10px;
       text-decoration:none;
       font-weight:900;
       color:#111;
@@ -56,6 +56,15 @@
       transition:color .18s ease, border-color .18s ease;
     }
     .back:hover{color:var(--gold);border-color:var(--gold)}
+
+    .legend{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+      margin:0 0 14px 0;
+    }
+    .legend strong{color:#111}
+    .legend .sale-dot{color:#b00000;font-weight:900}
 
     .group{margin-bottom:36px}
     .group-title{
@@ -84,6 +93,11 @@
       transform:translateY(-2px);
       border-color:var(--gold-soft);
     }
+    .item.disabled{
+      cursor:default;
+      opacity:.9;
+    }
+    .item.disabled:hover{transform:none}
 
     .thumb{
       width:92px;height:92px;flex:0 0 92px;
@@ -110,14 +124,7 @@
     .item-name{font-weight:900;font-size:16px}
     .sale{color:#b00000;font-weight:900;margin-left:6px;font-size:13px}
 
-    .meta{
-      margin-top:6px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    .prices{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}
+    .prices{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:13px}
     .price{
       background:#f4f4f4;
       border:1px solid #eee;
@@ -160,6 +167,11 @@
       background:#fff;
       color:var(--gold);
       border-color:var(--gold);
+    }
+
+    .btn.disabled{
+      opacity:.5;
+      cursor:not-allowed;
     }
 
     footer{
@@ -253,13 +265,20 @@
 
   <!-- ✅ Black header -->
   <header class="site-header">
-    <!-- Category page logo -->
     <img src="images/Bobbyb.png" class="brand-logo" alt="Bobby Black Exclusive" />
     <div class="subtitle">Flower Menu</div>
   </header>
 
   <div class="wrap">
     <a href="index.html" class="back">← Back to Menu</a>
+
+    <!-- ✅ Menu legend to match your screenshot -->
+    <div class="legend">
+      (<strong>8th</strong> / <strong>Q</strong> / <strong>Half</strong> / <strong>OZ</strong>) &nbsp; • &nbsp;
+      (<span class="sale-dot">🚨</span> = <strong>SALE</strong>) &nbsp; • &nbsp;
+      (<strong>N/A</strong> = <strong>NOT AVAILABLE</strong>)
+    </div>
+
     <div id="menu"></div>
   </div>
 
@@ -280,30 +299,38 @@
       document.getElementById("ageNo").onclick=()=>{window.location.href="https://www.google.com"}
     })();
 
-    function money(n){
-      const num = Number(n);
-      if(!isFinite(num)) return "N/A";
-      return "$" + num.toFixed(0);
-    }
-    function sizeLabel(k){ return k==="g3_5"?"3.5g":k==="g7"?"7g":k==="g14"?"14g":"28g"; }
+    // ===== EXACT MENU (from your screenshot) =====
+    // Prices correspond to: 8th(3.5g) / Q(7g) / Half(14g) / OZ(28g)
+    const MENU_SPEC = [
+      {
+        group: "CA$$H RULE$",
+        items: [
+          { name: "JELLY FISH", prices: { g3_5: "N/A", g7: 110, g14: 200, g28: 380 } },
+          { name: "Frosted peaches", prices: { g3_5: 50, g7: 100, g14: 180, g28: 340 } },
+          { name: "SUGAR SHOCK", sale: true, prices: { g3_5: 45, g7: 90, g14: 160, g28: 320 } },
+          { name: "Zaamatic", prices: { g3_5: 35, g7: 60, g14: 110, g28: 200 } },
+          { name: "Ready to trap", prices: { g3_5: 35, g7: 60, g14: 110, g28: 200 } }
+        ]
+      },
+      {
+        group: "LOOSE LINEUP",
+        items: [
+          { name: "Verzace", prices: { g3_5: 35, g7: 60, g14: 110, g28: 200 } },
+          { name: "Space candy", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
+          { name: "Fruit snacks", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
+          { name: "Sherbert", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
+          { name: "Peach rings", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
+          { name: "Silver back gorilla", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
+          { name: "Bubblegum poppers", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
+          { name: "Cherry candy", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
+          { name: "Pink Cadillac", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
+          { name: "Candy fumez (shake)", prices: { g3_5: 30, g7: 45, g14: 80, g28: 150 } },
+          { name: "Sherb candy (shake)", prices: { g3_5: 25, g7: 40, g14: 60, g28: 100 } }
+        ]
+      }
+    ];
 
-    function showPriceOrNA(item, k){
-      const available = item.availability?.[k] !== false;
-      const price = item.prices?.[k];
-      const hasPrice = price !== null && price !== undefined && price !== "";
-      if(available && hasPrice) return money(price);
-      return "N/A";
-    }
-
-    const GROUP_ORDER = ["BOBBY BLACK EXCLUSIVE","CA$$H RULE$","LOOSE LINEUP"];
-
-    // Hide items that are no longer on the menu
-    const HIDDEN_IDS = new Set([
-      "sherbanger-22",
-      "super-lemon-cherry"
-    ]);
-
-    // Image filenames (must exist in /images/)
+    // ===== Images (optional) =====
     const IMAGE_MAP = {
       "adl": "ADL.JPG",
       "cherry-candy": "CherryCandy.JPG",
@@ -319,49 +346,44 @@
       "fruit-snacks": "FruitStripes.JPG",
       "ready-to-trap": "ReadytoTrap.JPG",
       "sherbert": "Sherbet.JPG",
-      "verzace": "Verzace.JPG"
-    };
-
-    // ✅ FIXED: map *normalized names* to the right image file
-    const NAME_MAP = {
-      // Crrazzy variants
-      "crrazzy": "Crrazzy.JPG",
-      "crazzy": "Crrazzy.JPG",
-      "crazzyy": "Crrazzy.JPG",
-      "crazzzy": "Crrazzy.JPG",
-
-      "adl": "ADL.JPG",
-      "cherrycandy": "CherryCandy.JPG",
-      "chroniccandy": "ChronicCandy.JPG",
-      "frostedpeaches": "FrostedPeaches.JPG",
-      "jellyfish": "JellyFish.JPG",
-      "rainbowbelts": "RainbowBelts.JPG",
-      "spacecandy": "SpaceCandy.JPG",
-      "sugarshock": "SugarShock.JPG",
-      "zaamatic": "Zaamatic.JPG",
-      "blowpop": "BlowPop.JPG",
-      "fruitsnacks": "FruitStripes.JPG",
-      "readytotrap": "ReadytoTrap.JPG",
-      "sherbert": "Sherbet.JPG",
-      "verzace": "Verzace.JPG"
+      "verzace": "Verzace.JPG",
+      "peach-rings": "PeachRings.JPG",
+      "silver-back-gorilla": "SilverBackGorilla.JPG",
+      "bubblegum-poppers": "BubblegumPoppers.JPG",
+      "pink-cadillac": "PinkCadillac.JPG",
+      "candy-fumez-shake": "CandyFumezShake.JPG",
+      "sherb-candy-shake": "SherbCandyShake.JPG"
     };
 
     function normalizeKey(s){
       return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
     }
+    function slugifyName(s){
+      return String(s||"")
+        .toLowerCase()
+        .replace(/\(shake\)/g,"-shake")
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/(^-|-$)/g,"");
+    }
+
+    function moneyOrNA(v){
+      if(v === "N/A") return "N/A";
+      const n = Number(v);
+      if(!isFinite(n)) return "N/A";
+      return "$" + n.toFixed(0);
+    }
+
+    function sizeLabel(k){ return k==="g3_5"?"8th":k==="g7"?"Q":k==="g14"?"Half":"OZ"; }
 
     function getImageForItem(item){
-      // explicit image path in JSON wins
-      if(item.image && String(item.image).trim()) return String(item.image).trim();
+      if(item && item.image && String(item.image).trim()) return String(item.image).trim();
 
-      // by id
-      const byId = IMAGE_MAP[item.id];
-      if(byId) return "images/" + byId;
+      if(item && item.id && IMAGE_MAP[item.id]) return "images/" + IMAGE_MAP[item.id];
 
-      // by normalized name
-      const byName = NAME_MAP[normalizeKey(item.name)];
-      if(byName) return "images/" + byName;
-
+      if(item && item.name){
+        const maybe = IMAGE_MAP[slugifyName(item.name)];
+        if(maybe) return "images/" + maybe;
+      }
       return "";
     }
 
@@ -369,67 +391,47 @@
       location.href = "product.html?id=" + encodeURIComponent(id);
     }
 
-    // Optional: show a short meta line if fields exist in products.json
-    function buildMetaLine(item){
-      const bits = [];
-      if(item.type) bits.push(item.type);              // e.g., Indica/Hybrid/Sativa
-      if(item.brand) bits.push(item.brand);            // e.g., brand/line
-      if(item.thc) bits.push("THC " + item.thc);       // e.g., "THC 28%"
-      if(item.note) bits.push(item.note);              // short note
-      if(item.description && !item.note) {
-        const d = String(item.description).trim();
-        if(d) bits.push(d.length > 70 ? d.slice(0, 70) + "…" : d);
-      }
-      return bits.filter(Boolean).join(" • ");
-    }
-
+    // ===== Render EXACT menu, while still linking to product.html/cart if the item exists in products.json =====
     fetch("content/products.json",{cache:"no-store"})
       .then(r=>r.json())
       .then(data=>{
-        const items=(data.items||[])
-          .filter(i => i.category === "Flower")
-          .filter(i => !HIDDEN_IDS.has(i.id))
-          .slice()
-          .sort((a,b)=>{
-            const ga=(a.subcategory||"Other");
-            const gb=(b.subcategory||"Other");
-            const ka=GROUP_ORDER.indexOf(ga);
-            const kb=GROUP_ORDER.indexOf(gb);
-            const ska = (ka === -1 ? 999 : ka);
-            const skb = (kb === -1 ? 999 : kb);
-            if(ska !== skb) return ska - skb;
-            if(ga !== gb) return ga.localeCompare(gb);
-            return (a.name||"").localeCompare(b.name||"");
-          });
+        const all = (data.items||[]).filter(i => i.category === "Flower");
 
-        const groups={};
-        items.forEach(i=>{
-          const key=i.subcategory||"Other";
-          if(!groups[key]) groups[key]=[];
-          groups[key].push(i);
-        });
+        // lookup by normalized name & by id
+        const byId = new Map(all.map(i => [i.id, i]));
+        const byName = new Map(all.map(i => [normalizeKey(i.name), i]));
 
         const container=document.getElementById("menu");
         container.innerHTML = "";
 
-        const groupNames = [
-          ...GROUP_ORDER.filter(g=>groups[g]),
-          ...Object.keys(groups).filter(g=>!GROUP_ORDER.includes(g)).sort()
-        ];
-
-        groupNames.forEach(groupName=>{
+        MENU_SPEC.forEach(groupSpec=>{
           const group=document.createElement("div");
           group.className="group";
 
           const title=document.createElement("div");
           title.className="group-title";
-          title.textContent=groupName;
+          title.textContent=groupSpec.group;
           group.appendChild(title);
 
-          groups[groupName].forEach(item=>{
+          groupSpec.items.forEach(spec=>{
+            // try to match an existing json item (so Add/View work)
+            const keyName = normalizeKey(spec.name);
+            const guessId = slugifyName(spec.name);
+            const found = byName.get(keyName) || byId.get(guessId) || null;
+
+            // build display item (fallback even if missing from json)
+            const item = found ? found : {
+              id: guessId,
+              name: spec.name
+            };
+
+            const canOpen = !!found; // only open product page if it exists in products.json
+
             const div=document.createElement("div");
-            div.className="item";
-            div.onclick=()=>openProduct(item.id);
+            div.className="item" + (canOpen ? "" : " disabled");
+            if(canOpen){
+              div.onclick=()=>openProduct(item.id);
+            }
 
             const thumb=document.createElement("div");
             thumb.className="thumb";
@@ -445,7 +447,6 @@
             } else {
               thumb.innerHTML = "<div class='noimg'>No Image</div>";
             }
-
             div.appendChild(thumb);
 
             const main=document.createElement("div");
@@ -453,34 +454,23 @@
 
             const name=document.createElement("div");
             name.className="item-name";
-            name.textContent=item.name;
+            name.textContent=spec.name;
 
-            if(item.sale){
+            if(spec.sale){
               const s=document.createElement("span");
               s.className="sale";
               s.textContent="🚨 SALE";
               name.appendChild(s);
             }
-
             main.appendChild(name);
-
-            const metaText = buildMetaLine(item);
-            if(metaText){
-              const meta=document.createElement("div");
-              meta.className="meta";
-              meta.textContent = metaText;
-              main.appendChild(meta);
-            }
 
             const prices=document.createElement("div");
             prices.className="prices";
             ["g3_5","g7","g14","g28"].forEach(k=>{
-              const label = sizeLabel(k);
-              const val = showPriceOrNA(item, k);
-
               const p=document.createElement("span");
+              const val = moneyOrNA(spec.prices[k]);
               p.className="price" + (val === "N/A" ? " na" : "");
-              p.textContent = label + ": " + val;
+              p.textContent = sizeLabel(k) + ": " + val;
               prices.appendChild(p);
             });
             main.appendChild(prices);
@@ -489,20 +479,22 @@
             actions.className="actions-row";
 
             const addBtn=document.createElement("button");
-            addBtn.className="btn add";
+            addBtn.className="btn add" + (canOpen ? "" : " disabled");
             addBtn.type="button";
             addBtn.textContent="Add";
             addBtn.onclick=(e)=>{
               e.stopPropagation();
+              if(!canOpen) return;
               BBE_CART.openAddFlow(item.id, "content/products.json");
             };
 
             const viewBtn=document.createElement("button");
-            viewBtn.className="btn view";
+            viewBtn.className="btn view" + (canOpen ? "" : " disabled");
             viewBtn.type="button";
             viewBtn.textContent="View";
             viewBtn.onclick=(e)=>{
               e.stopPropagation();
+              if(!canOpen) return;
               openProduct(item.id);
             };
 
