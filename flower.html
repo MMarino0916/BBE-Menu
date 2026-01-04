@@ -110,14 +110,23 @@
     .item-name{font-weight:900;font-size:16px}
     .sale{color:#b00000;font-weight:900;margin-left:6px;font-size:13px}
 
-    .prices{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:13px}
+    .meta{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    .prices{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}
     .price{
       background:#f4f4f4;
       border:1px solid #eee;
       border-radius:999px;
       padding:6px 10px;
       transition:border-color .18s ease;
+      white-space:nowrap;
     }
+    .price.na{opacity:.55}
     .item:hover .price{border-color:var(--gold-soft)}
 
     .actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
@@ -228,7 +237,6 @@
   <!-- Age Gate -->
   <div id="ageGate" class="age-gate">
     <div class="age-card">
-      <!-- ✅ BBE logo inside age gate -->
       <img src="images/BBE.png" class="age-logo" alt="Bobby Black Exclusive" />
       <div class="age-title">21+ Only</div>
       <p>Please confirm you are 21 years of age or older.</p>
@@ -245,7 +253,7 @@
 
   <!-- ✅ Black header -->
   <header class="site-header">
-    <!-- ✅ Category pages use BBE.png -->
+    <!-- Category page logo -->
     <img src="images/Bobbyb.png" class="brand-logo" alt="Bobby Black Exclusive" />
     <div class="subtitle">Flower Menu</div>
   </header>
@@ -272,7 +280,11 @@
       document.getElementById("ageNo").onclick=()=>{window.location.href="https://www.google.com"}
     })();
 
-    function money(n){ return "$" + Number(n).toFixed(0); }
+    function money(n){
+      const num = Number(n);
+      if(!isFinite(num)) return "N/A";
+      return "$" + num.toFixed(0);
+    }
     function sizeLabel(k){ return k==="g3_5"?"3.5g":k==="g7"?"7g":k==="g14"?"14g":"28g"; }
 
     function showPriceOrNA(item, k){
@@ -310,10 +322,14 @@
       "verzace": "Verzace.JPG"
     };
 
+    // ✅ FIXED: map *normalized names* to the right image file
     const NAME_MAP = {
-      "crazzzy": "Crrazzy.JPG",
-      "crazzyy": "Crrazzy.JPG",
+      // Crrazzy variants
+      "crrazzy": "Crrazzy.JPG",
       "crazzy": "Crrazzy.JPG",
+      "crazzyy": "Crrazzy.JPG",
+      "crazzzy": "Crrazzy.JPG",
+
       "adl": "ADL.JPG",
       "cherrycandy": "CherryCandy.JPG",
       "chroniccandy": "ChronicCandy.JPG",
@@ -335,11 +351,14 @@
     }
 
     function getImageForItem(item){
-      if(item.image && item.image.trim()) return item.image.trim();
+      // explicit image path in JSON wins
+      if(item.image && String(item.image).trim()) return String(item.image).trim();
 
+      // by id
       const byId = IMAGE_MAP[item.id];
       if(byId) return "images/" + byId;
 
+      // by normalized name
       const byName = NAME_MAP[normalizeKey(item.name)];
       if(byName) return "images/" + byName;
 
@@ -348,6 +367,20 @@
 
     function openProduct(id){
       location.href = "product.html?id=" + encodeURIComponent(id);
+    }
+
+    // Optional: show a short meta line if fields exist in products.json
+    function buildMetaLine(item){
+      const bits = [];
+      if(item.type) bits.push(item.type);              // e.g., Indica/Hybrid/Sativa
+      if(item.brand) bits.push(item.brand);            // e.g., brand/line
+      if(item.thc) bits.push("THC " + item.thc);       // e.g., "THC 28%"
+      if(item.note) bits.push(item.note);              // short note
+      if(item.description && !item.note) {
+        const d = String(item.description).trim();
+        if(d) bits.push(d.length > 70 ? d.slice(0, 70) + "…" : d);
+      }
+      return bits.filter(Boolean).join(" • ");
     }
 
     fetch("content/products.json",{cache:"no-store"})
@@ -406,6 +439,7 @@
               const img=document.createElement("img");
               img.src = imgPath;
               img.alt = item.name;
+              img.loading = "lazy";
               img.onerror = () => { thumb.innerHTML = "<div class='noimg'>No Image</div>"; };
               thumb.appendChild(img);
             } else {
@@ -430,12 +464,23 @@
 
             main.appendChild(name);
 
+            const metaText = buildMetaLine(item);
+            if(metaText){
+              const meta=document.createElement("div");
+              meta.className="meta";
+              meta.textContent = metaText;
+              main.appendChild(meta);
+            }
+
             const prices=document.createElement("div");
             prices.className="prices";
             ["g3_5","g7","g14","g28"].forEach(k=>{
+              const label = sizeLabel(k);
+              const val = showPriceOrNA(item, k);
+
               const p=document.createElement("span");
-              p.className="price";
-              p.textContent=sizeLabel(k)+": "+showPriceOrNA(item, k);
+              p.className="price" + (val === "N/A" ? " na" : "");
+              p.textContent = label + ": " + val;
               prices.appendChild(p);
             });
             main.appendChild(prices);
