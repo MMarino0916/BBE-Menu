@@ -527,7 +527,7 @@
 
         <hr class="sep" />
 
-        <div class="section-title">EFFECTS</div>
+        <div class="section-title" id="effectsTitle">EFFECTS</div>
         <div class="effects-grid" id="effectsGrid"></div>
       </div>
     </div>
@@ -562,64 +562,45 @@
       window.location.replace("flower.html");
     }
 
-    // ✅ Image fallbacks (by ID)
+    // ✅ Image fallbacks (by ID) — updated for LIVE menu + new filenames
     const IMAGE_MAP = {
-      "adl": "ADL.JPG",
-      "cherry-candy": "CherryCandy.JPG",
-      "chronic-candy": "ChronicCandy.JPG",
-      "frosted-peaches": "FrostedPeaches.JPG",
-      "jelly-fish": "JellyFish.JPG",
-      "rainbow-belts": "RainbowBelts.JPG",
-      "space-candy": "SpaceCandy.JPG",
-      "sugar-shock": "SugarShock.JPG",
       "zaamatic": "Zaamatic.JPG",
-      "blow-pop": "BlowPop.JPG",
-      "crazzzy": "Crrazzy.JPG",
-      "fruit-snacks": "FruitStripes.JPG",
-      "ready-to-trap": "ReadytoTrap.JPG",
-      "sherbert": "Sherbet.JPG",
-      "verzace": "Verzace.JPG",
-      "rosin-budder": "RosinBudder.JPG",
 
-      /* ✅ NEW IMAGES */
-      "bubblegum-poppers": "BubbleGumPoppers.jpg",
-      "candy-fumes-shake": "CandyFumesShake.jpg",
-      "pink-cadillac": "PinkCadillac.jpg",
+      // NEW uploaded filenames
+      "double-bubble": "Double-bubble.png",
+      "pink-certz": "Pink-Certz.png",
+
+      // Existing
+      "space-candy": "SpaceCandy.JPG",
+      "fruit-snacks": "FruitStripes.JPG",
+      "sherbert": "Sherbet.JPG",
       "silver-back-gorilla": "SilverBackGorilla.jpg",
+      "bubblegum-poppers": "BubbleGumPoppers.jpg",
+      "pink-cadillac": "PinkCadillac.jpg",
+
+      // Shakes (IDs from products.json)
+      "candy-fumez-shake": "CandyFumesShake.jpg",
       "sherb-candy-shake": "SherbCandyShake.jpg",
-      "peach-rings": "PeachRings.jpg"
+
+      // Non-flower still supported
+      "rosin-budder": "RosinBudder.JPG"
     };
 
     // ✅ Image fallbacks (by normalized NAME)
-    // normalizeKey("Peach Rings") -> "peachrings"
     const NAME_MAP = {
-      "crazzzy": "Crrazzy.JPG",
-      "crazzyy": "Crrazzy.JPG",
-      "crazzy": "Crrazzy.JPG",
-      "adl": "ADL.JPG",
-      "cherrycandy": "CherryCandy.JPG",
-      "chroniccandy": "ChronicCandy.JPG",
-      "frostedpeaches": "FrostedPeaches.JPG",
-      "jellyfish": "JellyFish.JPG",
-      "rainbowbelts": "RainbowBelts.JPG",
-      "spacecandy": "SpaceCandy.JPG",
-      "sugarshock": "SugarShock.JPG",
       "zaamatic": "Zaamatic.JPG",
-      "blowpop": "BlowPop.JPG",
+      "doublebubble": "Double-bubble.png",
+      "pinkcertz": "Pink-Certz.png",
+      "spacecandy": "SpaceCandy.JPG",
       "fruitsnacks": "FruitStripes.JPG",
-      "readytotrap": "ReadytoTrap.JPG",
       "sherbert": "Sherbet.JPG",
-      "verzace": "Verzace.JPG",
-      "rosinbudder": "RosinBudder.JPG",
-
-      /* ✅ NEW IMAGES (name-based) */
-      "bubblegumpoppers": "BubbleGumPoppers.jpg",
-      "candyfumesshake": "CandyFumesShake.jpg",
-      "candyfumes": "CandyFumesShake.jpg",
-      "pinkcadillac": "PinkCadillac.jpg",
       "silverbackgorilla": "SilverBackGorilla.jpg",
+      "bubblegumpoppers": "BubbleGumPoppers.jpg",
+      "pinkcadillac": "PinkCadillac.jpg",
+      "candyfumezexoticshake": "CandyFumesShake.jpg",
+      "candyfumezshake": "CandyFumesShake.jpg",
       "sherbcandyshake": "SherbCandyShake.jpg",
-      "peachrings": "PeachRings.jpg"
+      "rosinbudder": "RosinBudder.JPG"
     };
 
     function normalizeKey(s){
@@ -641,6 +622,7 @@
     // UI refs
     const imgPanel = document.getElementById("imgPanel");
     const crumbTrail = document.getElementById("crumbTrail");
+    const backLink = document.getElementById("backLink");
     const typeBadge = document.getElementById("typeBadge");
     const productTitle = document.getElementById("productTitle");
     const brandLine = document.getElementById("brandLine");
@@ -653,6 +635,7 @@
     const aboutBy = document.getElementById("aboutBy");
     const aboutText = document.getElementById("aboutText");
     const effectsGrid = document.getElementById("effectsGrid");
+    const effectsTitle = document.getElementById("effectsTitle");
 
     const casshInline = document.getElementById("casshInline");
     const casshInlineImg = document.getElementById("casshInlineImg");
@@ -718,11 +701,22 @@
       priceEl.textContent = money(unit);
     }
 
+    // ✅ EXACT effects only (no defaults)
     function renderEffects(item){
       effectsGrid.innerHTML = "";
-      const effects = item.effects || [];
-      const shown = effects.length ? effects : ["Calm","Happy","Relaxed","Uplifted"];
-      shown.slice(0,6).forEach(e=>{
+      const effects = Array.isArray(item.effects) ? item.effects : [];
+
+      // Hide the entire section if no effects provided
+      if(!effects.length){
+        effectsTitle.style.display = "none";
+        effectsGrid.style.display = "none";
+        return;
+      }
+
+      effectsTitle.style.display = "inline-block";
+      effectsGrid.style.display = "grid";
+
+      effects.slice(0,4).forEach(e=>{
         const div = document.createElement("div");
         div.className = "effect";
         div.innerHTML = `<span class="icon">✦</span><span>${String(e).toUpperCase()}</span>`;
@@ -761,8 +755,13 @@
       } else {
         casshInline.style.display = "none";
       }
-
       return cassh;
+    }
+
+    function setBackLink(item){
+      // Flower products go back to flower menu; everything else back to index
+      backLink.href = (item && item.category === "Flower") ? "flower.html" : "index.html";
+      backLink.textContent = "← Back";
     }
 
     fetch("content/products.json", { cache:"no-store" })
@@ -776,10 +775,12 @@
           brandLine.textContent = "This product ID does not exist.";
           addBtn.disabled = true;
           addBtn.style.opacity = ".5";
+          setBackLink(null);
           return;
         }
 
         currentItem = item;
+        setBackLink(item);
 
         const cassh = applyCasshRulesBranding(item);
 
@@ -804,9 +805,23 @@
 
         renderEffects(item);
 
+        // Add to cart (prefers cart.js helpers if present)
         addBtn.onclick = () => {
           const qty = Number(qtySelect.value || 1);
-          for(let i=0;i<qty;i++){
+          const sizeKey = sizeSelect.value;
+
+          // If your cart.js exposes a direct add method, use it. Otherwise fall back to the existing flow.
+          if (BBE_CART && typeof BBE_CART.addItem === "function") {
+            BBE_CART.addItem(item.id, sizeKey, qty, "content/products.json");
+            return;
+          }
+          if (BBE_CART && typeof BBE_CART.add === "function") {
+            BBE_CART.add(item.id, sizeKey, qty, "content/products.json");
+            return;
+          }
+
+          // Fallback: open add flow once (most stable with unknown cart.js API)
+          if (BBE_CART && typeof BBE_CART.openAddFlow === "function") {
             BBE_CART.openAddFlow(item.id, "content/products.json");
           }
         };
