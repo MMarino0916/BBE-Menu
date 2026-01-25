@@ -556,33 +556,59 @@
     }
     function safeUpper(s){ return (s || "—").toString().toUpperCase(); }
     function getId(){ return new URLSearchParams(location.search).get("id"); }
+    function normalizeKey(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,""); }
 
     const id = getId();
     if(!id){
       window.location.replace("flower.html");
     }
 
-    // ✅ Image fallbacks (by ID) — updated for LIVE menu + new filenames
+    /* =========================
+       ✅ EFFECTS MAP (your list)
+       - matches by item.id OR normalized item.name
+    ========================== */
+    const EFFECTS_MAP = {
+      // Your earlier list
+      "jellyfish": ["CALM","HAPPY","RELAXED","UPLIFTED"],
+      "frostedpeaches": ["EUPHORIC","HAPPY","RELAXED","MUNCHIES"],
+      "sugarshock": ["ENERGIZING","UPLIFTED","CREATIVE","HAPPY"],
+      "zaamatic": ["RELAXED","BODY BUZZ","CALM","STRESS RELIEF"],
+      "readytotrap": ["FOCUSED","MOTIVATED","EUPHORIC","UPLIFTED"],
+      "verzace": ["EUPHORIC","RELAXED","TINGLY","HAPPY"],
+      "spacecandy": ["CREATIVE","UPLIFTED","EUPHORIC","CLEAR-HEADED"],
+      "fruitsnacks": ["HAPPY","GIGGLY","UPLIFTED","RELAXED"],
+      "sherbert": ["RELAXED","BODY BUZZ","CALM","STRESS RELIEF"],
+      "peachrings": ["HAPPY","UPLIFTED","MUNCHIES","RELAXED"],
+      "silverbackgorilla": ["RELAXED","HEAVY BODY","COUCH-LOCK","CALM"],
+      "bubblegumpoppers": ["CREATIVE","SOCIAL","HAPPY","UPLIFTED"],
+      "cherrycandy": ["EUPHORIC","HAPPY","UPLIFTED","TINGLY"],
+      "pinkcadillac": ["UPLIFTED","FOCUSED","HAPPY","MOTIVATED"],
+      "candyfumezshake": ["UPLIFTED","EUPHORIC","CREATIVE","RELAXED"],
+      "sherbcandyshake": ["CALM","HAPPY","RELAXED","MUNCHIES"],
+      "rosinbudder": ["EUPHORIC","RELAXED","TINGLY","HEAVY BODY"],
+
+      // Other mappings you added
+      "georgiazoap": ["RELAXED","EUPHORIC","BODY BUZZ","CALM"],
+      "lazergun": ["RELAXED","BODY BUZZ","UPLIFTED","STRESS RELIEF"],
+      "strawberryshortcake": ["HAPPY","RELAXED","MUNCHIES","CALM"],
+      "peachpanther": ["HEAVY BODY","RELAXED","CALM","SLEEPY"],
+      "doublebubble": ["RELAXED","HAPPY","MUNCHIES","CALM"],
+      "pinkcertz": ["EUPHORIC","HAPPY","RELAXED","CREATIVE"]
+    };
+
+    // ✅ Image fallbacks (by ID) — your updated filenames
     const IMAGE_MAP = {
       "zaamatic": "Zaamatic.JPG",
-
-      // NEW uploaded filenames
       "double-bubble": "Double-bubble.png",
       "pink-certz": "Pink-Certz.png",
-
-      // Existing
       "space-candy": "SpaceCandy.JPG",
       "fruit-snacks": "FruitStripes.JPG",
       "sherbert": "Sherbet.JPG",
       "silver-back-gorilla": "SilverBackGorilla.jpg",
       "bubblegum-poppers": "BubbleGumPoppers.jpg",
       "pink-cadillac": "PinkCadillac.jpg",
-
-      // Shakes (IDs from products.json)
       "candy-fumez-shake": "CandyFumesShake.jpg",
       "sherb-candy-shake": "SherbCandyShake.jpg",
-
-      // Non-flower still supported
       "rosin-budder": "RosinBudder.JPG"
     };
 
@@ -602,10 +628,6 @@
       "sherbcandyshake": "SherbCandyShake.jpg",
       "rosinbudder": "RosinBudder.JPG"
     };
-
-    function normalizeKey(s){
-      return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-    }
 
     function resolveImage(item){
       if(item.image && item.image.trim()) return item.image.trim();
@@ -701,12 +723,22 @@
       priceEl.textContent = money(unit);
     }
 
-    // ✅ EXACT effects only (no defaults)
+    // ✅ Effects: prefer item.effects, else fall back to EFFECTS_MAP
+    function getEffects(item){
+      const fromItem = Array.isArray(item.effects) ? item.effects.filter(Boolean) : [];
+      if(fromItem.length) return fromItem.map(e => String(e).toUpperCase());
+
+      const keyById = normalizeKey(item.id);
+      const keyByName = normalizeKey(item.name);
+      const mapped = EFFECTS_MAP[keyById] || EFFECTS_MAP[keyByName] || null;
+      return mapped ? mapped.map(e => String(e).toUpperCase()) : [];
+    }
+
     function renderEffects(item){
       effectsGrid.innerHTML = "";
-      const effects = Array.isArray(item.effects) ? item.effects : [];
 
-      // Hide the entire section if no effects provided
+      const effects = getEffects(item);
+
       if(!effects.length){
         effectsTitle.style.display = "none";
         effectsGrid.style.display = "none";
@@ -748,7 +780,6 @@
 
     function applyCasshRulesBranding(item){
       const cassh = isCasshRules(item);
-
       if(cassh){
         casshInline.style.display = "flex";
         casshInlineImg.onerror = () => { casshInline.style.display = "none"; };
@@ -759,7 +790,6 @@
     }
 
     function setBackLink(item){
-      // Flower products go back to flower menu; everything else back to index
       backLink.href = (item && item.category === "Flower") ? "flower.html" : "index.html";
       backLink.textContent = "← Back";
     }
@@ -805,24 +835,14 @@
 
         renderEffects(item);
 
-        // Add to cart (prefers cart.js helpers if present)
         addBtn.onclick = () => {
           const qty = Number(qtySelect.value || 1);
-          const sizeKey = sizeSelect.value;
 
-          // If your cart.js exposes a direct add method, use it. Otherwise fall back to the existing flow.
-          if (BBE_CART && typeof BBE_CART.addItem === "function") {
-            BBE_CART.addItem(item.id, sizeKey, qty, "content/products.json");
-            return;
-          }
-          if (BBE_CART && typeof BBE_CART.add === "function") {
-            BBE_CART.add(item.id, sizeKey, qty, "content/products.json");
-            return;
-          }
-
-          // Fallback: open add flow once (most stable with unknown cart.js API)
+          // safest fallback with unknown cart.js api
           if (BBE_CART && typeof BBE_CART.openAddFlow === "function") {
-            BBE_CART.openAddFlow(item.id, "content/products.json");
+            for(let i=0;i<qty;i++){
+              BBE_CART.openAddFlow(item.id, "content/products.json");
+            }
           }
         };
       })
