@@ -68,7 +68,7 @@
 
     .group{margin-bottom:36px}
 
-    /* ✅ group header supports optional logo */
+    /* ✅ group header now supports an optional logo */
     .group-head{
       display:flex;
       align-items:center;
@@ -163,27 +163,6 @@
     }
     .price.na{opacity:.55}
     .item:hover .price{border-color:var(--gold-soft)}
-
-    /* ✅ Effects row */
-    .effects{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-    .effect-pill{
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      border-radius:999px;
-      padding:6px 10px;
-      background:#fff;
-      border:1px solid rgba(0,0,0,0.10);
-      color:#111;
-      white-space:nowrap;
-    }
-    .item:hover .effect-pill{border-color:var(--gold-soft)}
 
     .actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .btn{
@@ -348,7 +327,7 @@
       document.getElementById("ageNo").onclick=()=>{window.location.href="https://www.google.com"}
     })();
 
-    // ===== MENU (LIVE: matches uploaded menu image) =====
+    // ===== MENU MUST MATCH YOUR MENU IMAGE EXACTLY =====
     // Prices correspond to: 8th(3.5g) / Q(7g) / Half(14g) / OZ(28g)
     const MENU_SPEC = [
       {
@@ -362,37 +341,31 @@
         group: "LOOSE LINEUP",
         items: [
           { name: "Double bubble", prices: { g3_5: 30, g7: 50, g14: 100, g28: 180 } },
-          { name: "Pink certz", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
-          { name: "Space candy", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
-          { name: "Fruit snacks", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
-          { name: "Silver back gorilla", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
-          { name: "Bubblegum poppers", prices: { g3_5: 25, g7: 45, g14: 90, g28: 160 } },
-          { name: "Sherbert", prices: { g3_5: 25, g7: 40, g14: 80, g28: 140 } },
-          { name: "Pink Cadillac", prices: { g3_5: 25, g7: 40, g14: 80, g28: 140 } },
+          { name: "Pink certz", prices: { g3_5: 25, g7: 45, g14: 90,  g28: 160 } },
+          { name: "Space candy", prices: { g3_5: 25, g7: 45, g14: 90,  g28: 160 } },
+          { name: "Fruit snacks", prices: { g3_5: 25, g7: 45, g14: 90,  g28: 160 } },
+          { name: "Silver back gorilla", prices: { g3_5: 25, g7: 45, g14: 90,  g28: 160 } },
+          { name: "Bubblegum poppers", prices: { g3_5: 25, g7: 45, g14: 90,  g28: 160 } },
+          { name: "Sherbert", prices: { g3_5: 25, g7: 40, g14: 80,  g28: 140 } },
+          { name: "Pink Cadillac", prices: { g3_5: 25, g7: 40, g14: 80,  g28: 140 } },
           { name: "Candy fumez (exotic shake)", prices: { g3_5: 30, g7: 45, g14: 80, g28: 150 } },
           { name: "Sherb candy (shake)", prices: { g3_5: 25, g7: 40, g14: 60, g28: 100 } }
         ]
       }
     ];
 
-    // ===== Images (optional; keeps fallbacks stable) =====
-    // Keys should match slugifyName(name)
+    // ===== Image map (fallback) =====
+    // Uses your existing paths first (item.image from products.json), then these fallbacks.
     const IMAGE_MAP = {
       "zaamatic": "Zaamatic.JPG",
-
-      // new uploaded filenames
       "double-bubble": "Double-bubble.png",
       "pink-certz": "Pink-Certz.png",
-
-      // existing images
       "space-candy": "SpaceCandy.JPG",
       "fruit-snacks": "FruitStripes.JPG",
       "silver-back-gorilla": "SilverBackGorilla.jpg",
       "bubblegum-poppers": "BubbleGumPoppers.jpg",
       "sherbert": "Sherbet.JPG",
       "pink-cadillac": "PinkCadillac.jpg",
-
-      // IMPORTANT: shake IDs must match products.json ids
       "candy-fumez-shake": "CandyFumesShake.jpg",
       "sherb-candy-shake": "SherbCandyShake.jpg"
     };
@@ -428,19 +401,6 @@
         if(maybe) return "images/" + maybe;
       }
       return "";
-    }
-
-    function renderEffects(effects){
-      if(!effects || !Array.isArray(effects) || effects.length === 0) return null;
-      const row = document.createElement("div");
-      row.className = "effects";
-      effects.slice(0,4).forEach(e=>{
-        const pill = document.createElement("span");
-        pill.className = "effect-pill";
-        pill.textContent = e;
-        row.appendChild(pill);
-      });
-      return row;
     }
 
     function openProduct(id){
@@ -481,7 +441,6 @@
           title.className="group-title";
           title.textContent=groupSpec.group;
           head.appendChild(title);
-
           group.appendChild(head);
 
           groupSpec.items.forEach(spec=>{
@@ -540,11 +499,7 @@
             });
             main.appendChild(prices);
 
-            // ✅ Effects featured on card (from products.json)
-            if(found && found.effects){
-              const fx = renderEffects(found.effects);
-              if(fx) main.appendChild(fx);
-            }
+            // ✅ EFFECTS REMOVED FROM FLOWER LIST (per your request)
 
             const actions=document.createElement("div");
             actions.className="actions-row";
