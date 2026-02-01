@@ -703,6 +703,11 @@
       return { key:null, price:null };
     }
 
+    function hasInStockPrice(item){
+      const best = getBestPrice(item);
+      return best.price !== null && best.price !== undefined && best.price !== "";
+    }
+
     function isCasshRules(item){
       const sub = (item.subcategory || "").trim();
       const norm = sub.toLowerCase().replace(/[^a-z0-9]/g,"");
@@ -835,8 +840,8 @@
         const items = Array.isArray(data.items) ? data.items : [];
         const flower = items.filter(x => x.category === "Flower");
 
-        // Only show "real" items (optional hard filter: must have image + at least 1 price)
-        const usable = flower.filter(x => x && x.id && x.name);
+        // Only show in-stock items (must have at least 1 available price)
+        const usable = flower.filter(x => x && x.id && x.name && hasInStockPrice(x));
 
         featured = shuffle(usable).slice(0,5);
 
