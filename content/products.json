@@ -4,7 +4,7 @@
       "id": "zaamatic",
       "name": "Zaamatic",
       "category": "Flower",
-      "subcategory": "CA$$H RULE$",
+      "subcategory": "CA$H RULE$",
       "live": true,
       "sale": false,
       "pricingType": "By Size (3.5/7/14/28)",
@@ -13,6 +13,35 @@
       "description": "",
       "effects": ["RELAXED", "BODY BUZZ", "CALM", "STRESS RELIEF"],
       "image": "images/Zaamatic.png"
+    },
+
+    {
+      "id": "jelly-fish",
+      "name": "Jelly Fish",
+      "category": "Flower",
+      "subcategory": "CA$H RULE$",
+      "live": true,
+      "sale": false,
+      "pricingType": "By Size (3.5/7/14/28)",
+      "prices": { "g3_5": 50, "g7": 100, "g14": 180, "g28": 340 },
+      "availability": { "g3_5": true, "g7": true, "g14": true, "g28": true },
+      "description": "",
+      "effects": ["RELAXED", "HAPPY", "MUNCHIES", "CALM"],
+      "image": "images/JellyFish.JPG"
+    },
+    {
+      "id": "lipzz",
+      "name": "Lipzz",
+      "category": "Flower",
+      "subcategory": "CA$H RULE$",
+      "live": true,
+      "sale": false,
+      "pricingType": "By Size (3.5/7/14/28)",
+      "prices": { "g3_5": 50, "g7": 100, "g14": 180, "g28": 340 },
+      "availability": { "g3_5": true, "g7": true, "g14": true, "g28": true },
+      "description": "",
+      "effects": ["RELAXED", "HAPPY", "MUNCHIES", "CALM"],
+      "image": ""
     },
 
     {
@@ -72,32 +101,32 @@
       "image": "images/Fruit-Stripes.png"
     },
     {
-      "id": "silver-back-gorilla",
-      "name": "Silver back gorilla",
+      "id": "strawberry-gelato",
+      "name": "Strawberry Gelato",
       "category": "Flower",
       "subcategory": "LOOSE LINEUP",
       "live": true,
       "sale": false,
       "pricingType": "By Size (3.5/7/14/28)",
-      "prices": { "g3_5": 25, "g7": 45, "g14": 90, "g28": 160 },
+      "prices": { "g3_5": 30, "g7": 50, "g14": 100, "g28": 180 },
       "availability": { "g3_5": true, "g7": true, "g14": true, "g28": true },
       "description": "",
       "effects": ["RELAXED", "HEAVY BODY", "COUCH-LOCK", "CALM"],
-      "image": "images/SilverBackGorilla.jpg"
+      "image": "images/Strawberry.png"
     },
     {
-      "id": "bubblegum-poppers",
-      "name": "Bubblegum poppers",
+      "id": "bolo-runtz",
+      "name": "Bolo Runtz",
       "category": "Flower",
       "subcategory": "LOOSE LINEUP",
       "live": true,
       "sale": false,
       "pricingType": "By Size (3.5/7/14/28)",
-      "prices": { "g3_5": 25, "g7": 45, "g14": 90, "g28": 160 },
+      "prices": { "g3_5": 30, "g7": 50, "g14": 100, "g28": 180 },
       "availability": { "g3_5": true, "g7": true, "g14": true, "g28": true },
       "description": "",
       "effects": ["CREATIVE", "SOCIAL", "HAPPY", "UPLIFTED"],
-      "image": "images/BubbleGumPoppers.jpg"
+      "image": "images/Bolo-Runtz.png"
     },
     {
       "id": "sherbert",
@@ -141,20 +170,6 @@
       "description": "",
       "effects": ["UPLIFTED", "EUPHORIC", "CREATIVE", "RELAXED"],
       "image": "images/CandyFumesShake.jpg"
-    },
-    {
-      "id": "sherb-candy-shake",
-      "name": "Sherb candy (shake)",
-      "category": "Flower",
-      "subcategory": "SHAKE",
-      "live": true,
-      "sale": false,
-      "pricingType": "By Size (3.5/7/14/28)",
-      "prices": { "g3_5": 25, "g7": 40, "g14": 60, "g28": 100 },
-      "availability": { "g3_5": true, "g7": true, "g14": true, "g28": true },
-      "description": "",
-      "effects": ["CALM", "HAPPY", "RELAXED", "MUNCHIES"],
-      "image": "images/SherbCandyShake.jpg"
     },
 
     {
