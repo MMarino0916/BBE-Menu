@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<!-- Updated: slim Flowery-style header/nav and BBE favicon. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Bobby Black Exclusive | Flower</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/BBE-Favicon.png">
 
   <style>
     :root{
@@ -22,20 +24,59 @@
     *{box-sizing:border-box}
     body{font-family:Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
 
-    /* ✅ Full-width black header bar */
     .site-header{
-      background:#000;
-      width:100%;
-      text-align:center;
-      padding:28px 16px 22px;
-      border-bottom:1px solid var(--gold-soft);
+      background:#ffffff;
+      border-bottom:1px solid rgba(0,0,0,0.08);
+      min-height:64px;
+      display:flex;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+    .header-inner{
+      width:min(1200px, 100%);
+      margin:0 auto;
+      padding:0 16px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:18px;
     }
     .brand-logo{
-      max-width:260px;
-      width:72%;
-      margin:0 auto;
+      height:34px;
+      width:auto;
       display:block;
     }
+    .main-nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+    .main-nav a{
+      font-size:12px;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      text-decoration:none;
+      color:#111;
+      opacity:0.9;
+    }
+    .main-nav a:hover{opacity:1}
+    .header-search input[type="search"]{
+      width:min(520px, 52vw);
+      height:38px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.12);
+      padding:0 14px;
+      font-size:12px;
+      letter-spacing:0.02em;
+      outline:none;
+      text-transform:uppercase;
+    }
+    .header-search input[type="search"]:focus{
+      border-color:rgba(0,0,0,0.28);
+    }
+
     .subtitle{
       margin-top:10px;
       font-size:12px;
@@ -264,10 +305,16 @@
     .age-sub{font-size:12px;color:#666;line-height:1.5;margin:10px 0 0}
 
     @media(max-width:700px){
-      .brand-logo{width:86%}
       .thumb{width:78px;height:78px;flex-basis:78px}
       .group-mark{width:34px;height:34px;flex-basis:34px}
     }
+
+    @media(max-width:768px){
+      .header-inner{grid-template-columns:auto 1fr;}
+      .main-nav{display:none;}
+      .header-search input[type="search"]{width:100%;}
+    }
+
   </style>
 
   <script src="cart.js"></script>
@@ -291,12 +338,30 @@
       </p>
     </div>
   </div>
-
-  <!-- ✅ Black header -->
   <header class="site-header">
-    <img src="images/Bobbyb.png" class="brand-logo" alt="Bobby Black Exclusive" />
-    <div class="subtitle">Flower Menu</div>
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="images/Bobbyb.png" alt="Bobby Black" />
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <a href="index.html">Menu</a>
+        <a href="index.html#brands">Brands</a>
+        <a href="index.html#categories">Categories</a>
+        <a href="index.html">About</a>
+      </nav>
+
+      <form class="header-search" role="search" action="#" method="GET">
+        <input
+          type="search"
+          name="q"
+          placeholder="WHAT CAN WE HELP YOU FIND?"
+          aria-label="Search"
+        />
+      </form>
+    </div>
   </header>
+  <div class="subtitle">Flower Menu</div>
 
   <div class="wrap">
     <a href="index.html" class="back">← Back to Menu</a>
