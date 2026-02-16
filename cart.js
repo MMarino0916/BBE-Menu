@@ -227,6 +227,7 @@
     a.style.cssText = `
       position:fixed; right:14px; top:14px; z-index:9998;
       background:#111; color:#fff; text-decoration:none;
+      border:1px solid rgba(255,255,255,0.4);
       border-radius:999px; padding:10px 14px; font-weight:900;
       font-family:Arial,sans-serif; box-shadow:0 10px 28px rgba(0,0,0,.20);
     `;

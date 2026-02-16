@@ -25,8 +25,8 @@
     body{font-family:Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
 
     .site-header{
-      background:#ffffff;
-      border-bottom:1px solid rgba(0,0,0,0.08);
+      background:#000;
+      border-bottom:1px solid rgba(255,255,255,0.16);
       min-height:64px;
       display:flex;
       align-items:center;
@@ -37,7 +37,7 @@
     .header-inner{
       width:min(1200px, 100%);
       margin:0 auto;
-      padding:0 16px;
+      padding:10px 16px;
       display:grid;
       grid-template-columns:auto 1fr auto;
       align-items:center;
@@ -52,29 +52,35 @@
       display:flex;
       gap:18px;
       align-items:center;
+      flex-wrap:wrap;
     }
     .main-nav a{
       font-size:12px;
       letter-spacing:0.04em;
       text-transform:uppercase;
       text-decoration:none;
-      color:#111;
-      opacity:0.9;
+      color:#fff;
+      opacity:0.92;
+      transition:opacity .18s ease, color .18s ease;
     }
-    .main-nav a:hover{opacity:1}
+    .main-nav a:hover,.main-nav a:focus-visible{opacity:1;color:#d9d9d9}
     .header-search input[type="search"]{
       width:min(520px, 52vw);
       height:38px;
       border-radius:999px;
-      border:1px solid rgba(0,0,0,0.12);
+      border:1px solid rgba(255,255,255,0.28);
+      background:rgba(255,255,255,0.06);
+      color:#fff;
       padding:0 14px;
       font-size:12px;
       letter-spacing:0.02em;
       outline:none;
       text-transform:uppercase;
     }
+    .header-search input[type="search"]::placeholder{color:rgba(255,255,255,0.66)}
     .header-search input[type="search"]:focus{
-      border-color:rgba(0,0,0,0.28);
+      border-color:rgba(255,255,255,0.48);
+      background:rgba(255,255,255,0.12);
     }
 
     .subtitle{
@@ -310,8 +316,9 @@
     }
 
     @media(max-width:768px){
-      .header-inner{grid-template-columns:auto 1fr;}
-      .main-nav{display:none;}
+      .header-inner{grid-template-columns:1fr;gap:10px;justify-items:center;}
+      .main-nav{justify-content:center;}
+      .header-search{width:100%;}
       .header-search input[type="search"]{width:100%;}
     }
 
@@ -340,15 +347,14 @@
   </div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="index.html">
+      <a class="brand" href="/">
         <img class="brand-logo" src="images/Bobbyb.png" alt="Bobby Black" />
       </a>
 
       <nav class="main-nav" aria-label="Primary">
-        <a href="index.html">Menu</a>
-        <a href="index.html#brands">Brands</a>
-        <a href="index.html#categories">Categories</a>
-        <a href="index.html">About</a>
+        <a href="brands.html">Brands</a>
+        <a href="categories.html">Categories</a>
+        <a href="about.html">About</a>
       </nav>
 
       <form class="header-search" role="search" action="#" method="GET">
