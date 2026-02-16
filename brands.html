@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brands | Bobby Black Exclusive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/BBE-Favicon.png">
+  <style>
+    :root{--bg:#fafafa;--text:#111;--muted:#666;--card:#fff;--border:rgba(0,0,0,.1)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .site-header{background:#000;border-bottom:1px solid rgba(255,255,255,.16);min-height:64px;display:flex;align-items:center;position:sticky;top:0;z-index:1000}
+    .header-inner{width:min(1200px,100%);margin:0 auto;padding:10px 16px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px}
+    .brand-logo{height:34px;width:auto;display:block}
+    .main-nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .main-nav a{font-size:12px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:#fff;opacity:.92;transition:opacity .18s ease,color .18s ease}
+    .main-nav a:hover,.main-nav a:focus-visible{opacity:1;color:#d9d9d9}
+    .header-search input{width:min(420px,42vw);height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);color:#fff;padding:0 14px;font-size:12px;letter-spacing:.02em;text-transform:uppercase;outline:none}
+    .header-search input::placeholder{color:rgba(255,255,255,.66)}
+    .wrap{max-width:1050px;margin:0 auto;padding:32px 16px 48px}
+    h1{margin:0 0 18px;font-size:34px;letter-spacing:.5px}
+    .lead{margin:0 0 26px;color:var(--muted);max-width:700px;line-height:1.6}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+    .card h2{margin:0 0 12px;font-size:20px}
+    .card p{margin:0;color:#333;line-height:1.65}
+    .cta{display:inline-block;margin-top:28px;padding:12px 18px;border-radius:999px;background:#111;color:#fff;text-decoration:none;font-weight:700;letter-spacing:.03em}
+    .cta:hover{background:#222}
+    @media(max-width:768px){.header-inner{grid-template-columns:1fr;gap:10px;justify-items:center}.main-nav{justify-content:center}.header-search{width:100%}.header-search input{width:100%}}
+  </style>
+  <script src="cart.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="brand-logo" src="images/Bobbyb.png" alt="Bobby Black" /></a>
+      <nav class="main-nav" aria-label="Primary">
+        <a href="brands.html">Brands</a>
+        <a href="categories.html">Categories</a>
+        <a href="about.html">About</a>
+      </nav>
+      <form class="header-search" role="search" action="#" method="GET">
+        <input type="search" name="q" placeholder="SEARCH MENU" aria-label="Search" />
+      </form>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Brands</h1>
+    <p class="lead">Two names define the Bobby Black lineup: one built for modern luxury and one made for bold, high-energy drops.</p>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Bobby Black Exclusive</h2>
+        <p>Bobby Black Exclusive delivers a modern luxury cannabis experience designed around quality, flavor, and elevated presentation. Each release is curated to balance premium genetics with clean execution, so every drop feels intentional. The result is a polished lineup built for people who care about consistency and craft.</p>
+      </article>
+
+      <article class="card">
+        <h2>Cash Rules</h2>
+        <p>Cash Rules brings a bold street-luxury perspective to the menu with standout strains and personality-driven drops. The focus is on punchy flavor, strong visual identity, and products that stay in demand. It is a brand made for shoppers who want premium quality with unmistakable attitude.</p>
+      </article>
+    </section>
+
+    <a class="cta" href="index.html">Browse Menu</a>
+  </main>
+
+  <script>
+    if (window.BBE_CART && typeof BBE_CART.mountCartPill === "function") BBE_CART.mountCartPill();
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Categories | Bobby Black Exclusive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/BBE-Favicon.png">
+  <style>
+    :root{--bg:#fafafa;--text:#111;--muted:#666;--card:#fff;--border:rgba(0,0,0,.1)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .site-header{background:#000;border-bottom:1px solid rgba(255,255,255,.16);min-height:64px;display:flex;align-items:center;position:sticky;top:0;z-index:1000}
+    .header-inner{width:min(1200px,100%);margin:0 auto;padding:10px 16px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px}
+    .brand-logo{height:34px;width:auto;display:block}
+    .main-nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .main-nav a{font-size:12px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:#fff;opacity:.92;transition:opacity .18s ease,color .18s ease}
+    .main-nav a:hover,.main-nav a:focus-visible{opacity:1;color:#d9d9d9}
+    .header-search input{width:min(420px,42vw);height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);color:#fff;padding:0 14px;font-size:12px;letter-spacing:.02em;text-transform:uppercase;outline:none}
+    .header-search input::placeholder{color:rgba(255,255,255,.66)}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 16px 48px}
+    h1{margin:0 0 10px;font-size:34px}
+    .sub{margin:0 0 26px;color:var(--muted)}
+    .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+    .tile{display:block;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-decoration:none;color:inherit;min-height:122px;transition:transform .16s ease,box-shadow .16s ease}
+    .tile:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.1)}
+    .tile h2{margin:0 0 8px;font-size:19px}
+    .tile p{margin:0;color:#444;line-height:1.55}
+    .coming-title{margin:32px 0 14px;font-size:12px;letter-spacing:2px;color:#777;text-transform:uppercase;font-weight:900}
+    .disabled{background:#ededed;color:#828282;border-color:#d6d6d6;pointer-events:none}
+    .disabled p{color:#8b8b8b}
+    .note{margin-top:20px;color:#666;font-size:14px}
+    @media(max-width:768px){.header-inner{grid-template-columns:1fr;gap:10px;justify-items:center}.main-nav{justify-content:center}.header-search{width:100%}.header-search input{width:100%}}
+  </style>
+  <script src="cart.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="brand-logo" src="images/Bobbyb.png" alt="Bobby Black" /></a>
+      <nav class="main-nav" aria-label="Primary">
+        <a href="brands.html">Brands</a>
+        <a href="categories.html">Categories</a>
+        <a href="about.html">About</a>
+      </nav>
+      <form class="header-search" role="search" action="#" method="GET">
+        <input type="search" name="q" placeholder="SEARCH MENU" aria-label="Search" />
+      </form>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Categories</h1>
+    <p class="sub">Explore active menu categories and keep an eye out for new releases coming soon.</p>
+
+    <section class="tiles" aria-label="Active categories">
+      <a class="tile" href="flower.html">
+        <h2>Flower</h2>
+        <p>Core flower lineup from Bobby Black Exclusive and Cash Rules drops.</p>
+      </a>
+      <a class="tile" href="concentrates.html">
+        <h2>Concentrates</h2>
+        <p>Current concentrate options available now on the menu.</p>
+      </a>
+      <a class="tile" href="accessories.html">
+        <h2>Accessories</h2>
+        <p>Wraps, papers, and essentials to complete the experience.</p>
+      </a>
+    </section>
+
+    <div class="coming-title">Coming Soon</div>
+    <section class="tiles" aria-label="Coming soon categories">
+      <div class="tile disabled"><h2>Vapes (Coming Soon)</h2><p>New hardware and oil options are in development.</p></div>
+      <div class="tile disabled"><h2>Edibles (Coming Soon)</h2><p>Flavor-forward edible options are on deck.</p></div>
+          </section>
+
+    <p class="note">More categories are coming soon as the Bobby Black menu continues to expand.</p>
+  </main>
+
+  <script>
+    if (window.BBE_CART && typeof BBE_CART.mountCartPill === "function") BBE_CART.mountCartPill();
+  </script>
+</body>
+</html>
